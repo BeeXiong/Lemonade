@@ -8,5 +8,6 @@ namespace LemonadeStand
 {
     class Weather
     {
+        List<string> weatherConditions = new List<string>();
     }
 }

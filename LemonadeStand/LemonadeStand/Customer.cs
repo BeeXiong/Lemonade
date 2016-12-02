@@ -8,5 +8,12 @@ namespace LemonadeStand
 {
     class Customer
     {
+        private double playerDisposition;
+        List<string> potentialCustomers = new List<string>();
+        public void GenerateCustomers()
+        {
+
+        }
+        public void 
     }
 }

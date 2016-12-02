@@ -8,5 +8,7 @@ namespace LemonadeStand
 {
     class Player
     {
+        public double playerBank;
+
     }
 }

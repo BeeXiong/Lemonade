@@ -8,5 +8,16 @@ namespace LemonadeStand
 {
     class Recipe
     {
+        List<int> dailyCups = new List<int>();
+        Recipe lemons;
+
+        public Recipe()
+        {
+            lemons = new Recipe();
+        }
+
+
     }
+    
+
 }

@@ -8,5 +8,6 @@ namespace LemonadeStand
 {
     class Lemon
     {
+        List<int> lemons = new List<int>();
     }
 }

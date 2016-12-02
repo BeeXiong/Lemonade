@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class HumanPlayer
+    class HumanPlayer : Player
     {
+    
     }
 }

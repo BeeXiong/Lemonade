@@ -52,7 +52,6 @@
     <Compile Include="Ice.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Lemon.cs" />
-    <Compile Include="LemonadePitcher.cs" />
     <Compile Include="Recipe.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="Sugar.cs" />
