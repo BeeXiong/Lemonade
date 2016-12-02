@@ -1,1 +1,2 @@
 c:\users\bee\documents\visual studio 2015\Projects\LemonadeStand\LemonadeStand\bin\Debug\LemonadeStand.exe.config
+C:\Users\Bee\Desktop\Git\Lemonade Stand\LemonadeStand\LemonadeStand\bin\Debug\LemonadeStand.exe.config
