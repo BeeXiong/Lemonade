@@ -8,5 +8,9 @@ namespace LemonadeStand
 {
     class Game
     {
+        public void GameLoop()
+        {
+
+        }
     }
 }

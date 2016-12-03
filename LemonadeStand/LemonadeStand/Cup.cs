@@ -8,5 +8,11 @@ namespace LemonadeStand
 {
     class Cup
     {
+        public List<int> gameCups = new List<int>();
+
+        public Cup()
+        {
+
+        }
     }
 }

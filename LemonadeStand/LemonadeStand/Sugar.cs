@@ -8,5 +8,10 @@ namespace LemonadeStand
 {
     class Sugar
     {
+        List<int> gameSugar = new List<int>();
+        public Sugar()
+        {
+
+        }
     }
 }

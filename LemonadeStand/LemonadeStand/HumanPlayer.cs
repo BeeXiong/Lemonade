@@ -8,6 +8,14 @@ namespace LemonadeStand
 {
     class HumanPlayer : Player
     {
-    
+        public override void NamePlayers()
+        {
+            base.NamePlayers();
+        }
+        public override void DisplayPlayerBank()
+        {
+            base.DisplayPlayerBank();
+        }
+        
     }
 }

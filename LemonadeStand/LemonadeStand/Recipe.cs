@@ -9,11 +9,19 @@ namespace LemonadeStand
     class Recipe
     {
         List<int> dailyCups = new List<int>();
-        Recipe lemons;
+        Lemon lemonInventory;
+        Sugar sugarInventory;
+        IceCube iceInventory;
 
         public Recipe()
         {
-            lemons = new Recipe();
+            this.lemonInventory = new Lemon();
+            this.sugarInventory = new Sugar();
+            this.iceInventory = new IceCube();
+        }
+        public void Display()
+        {
+        
         }
 
 

@@ -8,6 +8,11 @@ namespace LemonadeStand
 {
     class Lemon
     {
-        List<int> lemons = new List<int>();
+        public List<int> gameLemons = new List<int>();
+        public Lemon()
+        {
+
+        }
+        
     }
 }

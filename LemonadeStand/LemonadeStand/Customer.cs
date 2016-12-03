@@ -10,10 +10,19 @@ namespace LemonadeStand
     {
         private double playerDisposition;
         List<string> potentialCustomers = new List<string>();
-        public void GenerateCustomers()
+        Weather dailyWeatherConditions;
+        
+        public Customer(double playerDisposition)
+        {
+            dailyWeatherConditions = new Weather();
+        }
+        public void GenerateCustomer()
+        {
+            
+        }
+        public void CalculateDisposition()
         {
 
         }
-        public void 
     }
 }

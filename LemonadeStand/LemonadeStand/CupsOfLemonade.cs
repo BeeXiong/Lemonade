@@ -9,30 +9,24 @@ namespace LemonadeStand
     class CupsOfLemonade
     {
         private double salePrice;
-        HumanPlayer firstplayer;
-
+        List<int> CupsForSale = new List<int>();
         public CupsOfLemonade(double salePrice)
         {
             this.salePrice = salePrice;
-            firstplayer = new HumanPlayer();
         }
-        public void GenerateSalePrice()
+        public void MakeCups()
         {
 
         }
-        public void GenerateSalesAmount()
+        public void DetermineIngredient()
+        {
+
+        }
+        public void SubtractIngredients()
         {
 
         }
 
-        public void AddSalesToBank()
-        {
-            
-        }
-        public void GetPlayerSales(double totalSales)
-        {
-            totalSales = firstplayer.playerBank;
-        }
     }
 
 }

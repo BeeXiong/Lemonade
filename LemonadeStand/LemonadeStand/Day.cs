@@ -8,5 +8,10 @@ namespace LemonadeStand
 {
     class Day
     {
+        int gameDays;
+        public void IdentifyGameDays()
+        {
+
+        }
     }
 }

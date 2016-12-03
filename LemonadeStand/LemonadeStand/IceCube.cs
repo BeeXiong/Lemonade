@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Ice
+    class IceCube
     {
+        public List<int> gameIceCubes = new List<int>();
+        public IceCube()
+        {
+
+        }
     }
 }
