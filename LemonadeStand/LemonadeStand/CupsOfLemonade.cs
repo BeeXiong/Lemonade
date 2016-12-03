@@ -8,11 +8,18 @@ namespace LemonadeStand
 {
     class CupsOfLemonade
     {
-        private double salePrice;
         List<int> CupsForSale = new List<int>();
-        public CupsOfLemonade(double salePrice)
+        Lemon lemonInventory;
+        Cup cupInventory;
+        Sugar sugarInventory;
+        IceCube iceInventory;
+
+        public CupsOfLemonade()
         {
-            this.salePrice = salePrice;
+            this.lemonInventory = new Lemon();
+            this.cupInventory = new Cup();
+            this.sugarInventory = new Sugar();
+            this.iceInventory = new IceCube();
         }
         public void MakeCups()
         {

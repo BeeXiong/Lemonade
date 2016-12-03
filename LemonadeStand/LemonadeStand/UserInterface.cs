@@ -8,5 +8,25 @@ namespace LemonadeStand
 {
     class UserInterface
     {
+        public void DisplayOptions()
+        {
+
+        }
+        public void DisplayWelcome()
+        {
+
+        }
+        public void DisplayRules()
+        {
+
+        }
+        public void SelectGameLevel()
+        {
+
+        }
+        public void RestartGame()
+        {
+
+        }
     }
 }

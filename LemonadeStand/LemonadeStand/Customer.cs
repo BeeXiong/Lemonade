@@ -18,7 +18,7 @@ namespace LemonadeStand
         }
         public void GenerateCustomer()
         {
-            
+           
         }
         public void CalculateDisposition()
         {
