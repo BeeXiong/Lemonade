@@ -10,6 +10,13 @@ namespace LemonadeStand
     {
         static void Main(string[] args)
         {
+            Store Test = new Store();
+            Test.IdentifyItem();
+            Test.DefineItemAmount();
+            Test.PurchaseItem();
+         
+
+            Console.ReadKey();
         }
     }
 }

@@ -9,11 +9,12 @@ namespace LemonadeStand
     class LemonadeSales
     {
         private double salePrice;
-        HumanPlayer firstplayer;
+        public HumanPlayer firstPlayer;
         
         public LemonadeSales()
         {
-            firstplayer = new HumanPlayer();
+            firstPlayer = new HumanPlayer();
+           
         }
         public void GenerateSellingPrice()
         {
@@ -21,7 +22,7 @@ namespace LemonadeStand
         }
         public void GenerateIncome()
         {
-            
+           
         }
 
         public void AdjustPlayerBank()
@@ -30,7 +31,7 @@ namespace LemonadeStand
         }
         public void GetPlayerSales(double totalSales)
         {
-            totalSales = firstplayer.playerBank;
+            totalSales = firstPlayer.playerBank;
         }
 
         public void AnalyzeDailySales()

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Sugar
+    class SugarCubes
     {
         List<int> gameSugar = new List<int>();
-        public Sugar()
+        public SugarCubes()
         {
 
         }

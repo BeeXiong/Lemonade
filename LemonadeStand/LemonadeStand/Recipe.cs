@@ -10,13 +10,13 @@ namespace LemonadeStand
     {
         List<int> dailyCups = new List<int>();
         Lemon lemonInventory;
-        Sugar sugarInventory;
+        SugarCubes sugarInventory;
         IceCube iceInventory;
 
         public Recipe()
         {
             this.lemonInventory = new Lemon();
-            this.sugarInventory = new Sugar();
+            this.sugarInventory = new SugarCubes();
             this.iceInventory = new IceCube();
         }
         public void Display()

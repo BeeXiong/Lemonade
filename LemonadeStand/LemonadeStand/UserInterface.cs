@@ -28,5 +28,9 @@ namespace LemonadeStand
         {
 
         }
+        public void SelectPlayers()
+        {
+
+        }
     }
 }

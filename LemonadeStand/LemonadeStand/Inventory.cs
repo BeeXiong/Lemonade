@@ -10,19 +10,31 @@ namespace LemonadeStand
     {
         Lemon lemonInventory;
         Cup cupInventory;
-        Sugar sugarInventory;
+        SugarCubes sugarInventory;
         IceCube iceInventory;
+        Store storePurchase;
 
         public Inventory()
         {
             this.lemonInventory = new Lemon();
             this.cupInventory = new Cup();
-            this.sugarInventory = new Sugar();
+            this.sugarInventory = new SugarCubes();
             this.iceInventory = new IceCube();
+            this.storePurchase = new Store();
         }
-        public void CalculateInventory()
+        public void subtractInventory()
         {
-
+            for (int index = 0; index < storePurchase.selectedAmount; index++ ) 
+            {
+                lemonInventory.gameLemons.RemoveAt(0);
+            }
+        }
+        public void addInventory()
+        {
+            for (int index = 0; index < storePurchase.selectedAmount; index++)
+            {
+                lemonInventory.gameLemons.Last();
+            }
         }
         public void DisplayInventory()
         {
