@@ -8,11 +8,23 @@ namespace LemonadeStand
 {
     class Lemon
     {
-        public List<int> gameLemons = new List<int>();
+        public double lemonprice;
         public Lemon()
         {
-
+            
         }
-        
+        public void SetPrice()
+        {
+            lemonprice = .25;
+            
+        }
+        public double GetPrice()
+        {
+            return lemonprice;
+        }
+        public void find()
+        {
+            Console.WriteLine(GetPrice());
+        }
     }
 }

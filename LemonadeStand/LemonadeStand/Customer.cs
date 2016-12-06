@@ -9,12 +9,13 @@ namespace LemonadeStand
     class Customer
     {
         private double playerDisposition;
-        List<string> potentialCustomers = new List<string>();
+        List<Customer> potentialCustomers;  
         Weather dailyWeatherConditions;
         
         public Customer(double playerDisposition)
         {
             dailyWeatherConditions = new Weather();
+            potentialCustomers = new List<Customer>();
         }
         public void GenerateCustomer()
         {

@@ -8,22 +8,16 @@ namespace LemonadeStand
 {
     class Store
     {
-        Lemon lemonInventory;
-        Cup cupInventory;
-        SugarCubes sugarInventory;
-        IceCube iceInventory;
-        string selectedItem;
-        public int selectedAmount;
+        private string selectedItem;
+        private int selectedAmount;
+        private double transactionAmount;
 
         public Store()
         {
-            this.lemonInventory = new Lemon();
-            this.cupInventory = new Cup();
-            this.sugarInventory = new SugarCubes();
-            this.iceInventory = new IceCube();
+            
         }
 
-        public void IdentifyItem()
+        public void IdentifyItem()//need a exemption handle for the amount of items a user picks
         {
             Console.WriteLine("What would you like to purchase?");
             Console.WriteLine("Lemons");
@@ -37,7 +31,7 @@ namespace LemonadeStand
                 case "ice cubes":
                 case "sugar cubes":
                 case "cups":
-                    GetPurchaseItem(userInput);
+                    setPurchaseItem(userInput);
                     break;
                 default:
                     Console.WriteLine("Invaild Entry. Please select either 'Lemons' - 'Ice Cubes' - 'Sugar Cubes' - 'Cups' ");
@@ -45,43 +39,47 @@ namespace LemonadeStand
                     break;
             }
         }
-        public void GetPurchaseItem(string userInput)
+        public void setPurchaseItem(string userInput)
         {
             selectedItem = userInput;
         }
-        public int DefineItemAmount()///need a exemption handle for the amount of items a user picks
+        public string getPurchaseItem()
         {
-            Console.WriteLine("You have selected {0}", selectedItem);
-            Console.WriteLine("How many {0} would you like to purchase", selectedItem);
+            return selectedItem;
+        }
+        public void SetItemAmount()///need a exemption handle for the amount of items a user picks
+        {
+            Console.WriteLine("You have selected {0}", getPurchaseItem());
+            Console.WriteLine("How many {0} would you like to purchase", getPurchaseItem());
             string userInput = Console.ReadLine();
             int.TryParse(userInput, out selectedAmount);
+        }
+        public int getPurchaseAmount()
+        {
             return selectedAmount;
         }
-        public void PurchaseItem()
+
+        public void SetTransactionAmount(Lemon newLemon, IceCube newIceCube, Cup newCup, SugarCubes newSugarCube)
         {
-            if (selectedItem == "lemons") ///make a possible list of items and reference list rather than a string///
+            if (selectedItem == "lemons")
             {
-                ///run inventory methods for subtracting and adding to list
+                transactionAmount == newLemon.SetPrice() * getPurchaseAmount();
             }
             else if (selectedItem == "cups")
             {
-
+                newCup.SetPrice();
             }
             else if (selectedItem == "sugar cubes")
             {
-
+                newSugarCube.SetPrice();
             }
-            else if(selectedItem =="ice cubes")
+            else if (selectedItem == "ice cubes")
             {
-
+                newIceCube.SetPrice();
             }
-            else
-            {
-
-            }
-            Console.WriteLine("You have chosen to purchase {0} {1}", selectedAmount , selectedItem);
-            Console.WriteLine();
         }
+
+    
         
     }
     

@@ -8,9 +8,20 @@ namespace LemonadeStand
 {
     class Game
     {
+        Store purchasing;
+        Inventory gameInventory;
+        HumanPlayer firstPlayer;
+        
+        public Game()
+        {
+            purchasing = new Store();
+            gameInventory = new Inventory();
+            firstPlayer = new HumanPlayer();
+        }
         public void GameLoop()
         {
-
+ 
         }
+
     }
 }

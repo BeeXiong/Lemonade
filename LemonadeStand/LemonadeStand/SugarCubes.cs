@@ -8,10 +8,23 @@ namespace LemonadeStand
 {
     class SugarCubes
     {
-        List<int> gameSugar = new List<int>();
+        private double sugarCubePrice;
         public SugarCubes()
         {
 
+        }
+        public void SetPrice()
+        {
+            sugarCubePrice = .01;
+            Console.WriteLine(sugarCubePrice);
+        }
+        public double GetPrice()
+        {
+            return sugarCubePrice;
+        }
+        public void find()
+        {
+            Console.WriteLine(GetPrice());
         }
     }
 }

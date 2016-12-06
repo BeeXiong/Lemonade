@@ -18,7 +18,7 @@ namespace LemonadeStand
         }
         public void GenerateSellingPrice()
         {
-            
+           
         }
         public void GenerateIncome()
         {
@@ -31,7 +31,7 @@ namespace LemonadeStand
         }
         public void GetPlayerSales(double totalSales)
         {
-            totalSales = firstPlayer.playerBank;
+            
         }
 
         public void AnalyzeDailySales()

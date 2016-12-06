@@ -8,10 +8,23 @@ namespace LemonadeStand
 {
     class IceCube
     {
-        public List<int> gameIceCubes = new List<int>();
+        private double iceCubePrice;
         public IceCube()
         {
-
+    
+        }
+        public void SetPrice()
+        {
+            iceCubePrice = .01;
+            Console.WriteLine(iceCubePrice);
+        }
+        public double GetPrice()
+        {
+            return iceCubePrice;
+        }
+        public void find()
+        {
+            Console.WriteLine(GetPrice());
         }
     }
 }

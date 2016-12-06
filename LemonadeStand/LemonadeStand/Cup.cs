@@ -8,11 +8,25 @@ namespace LemonadeStand
 {
     class Cup
     {
-        public List<int> gameCups = new List<int>();
-
+        private double cupPrice;
         public Cup()
         {
 
         }
+        public void SetPrice()
+        {
+            cupPrice = .10;
+            Console.WriteLine(cupPrice);
+        }
+        public double GetPrice()
+        {
+            return cupPrice;
+        }
+        public void find()
+        {
+            Console.WriteLine(GetPrice());
+        }
+
+
     }
 }
