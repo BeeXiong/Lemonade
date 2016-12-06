@@ -8,17 +8,17 @@ namespace LemonadeStand
 {
     class SugarCubes
     {
-        private double sugarCubePrice;
+        private decimal sugarCubePrice;
         public SugarCubes()
         {
 
         }
         public void SetPrice()
         {
-            sugarCubePrice = .01;
+            sugarCubePrice = .01m;
             Console.WriteLine(sugarCubePrice);
         }
-        public double GetPrice()
+        public decimal GetPrice()
         {
             return sugarCubePrice;
         }

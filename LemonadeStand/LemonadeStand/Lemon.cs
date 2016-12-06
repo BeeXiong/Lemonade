@@ -8,17 +8,16 @@ namespace LemonadeStand
 {
     class Lemon
     {
-        public double lemonprice;
+        public decimal lemonprice;
         public Lemon()
         {
             
         }
         public void SetPrice()
         {
-            lemonprice = .25;
-            
+            lemonprice = .25m;   
         }
-        public double GetPrice()
+        public decimal GetPrice()
         {
             return lemonprice;
         }

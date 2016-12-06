@@ -10,7 +10,7 @@ namespace LemonadeStand
     {
         private string selectedItem;
         private int selectedAmount;
-        private double transactionAmount;
+        private decimal transactionAmount;
 
         public Store()
         {
@@ -54,33 +54,33 @@ namespace LemonadeStand
             string userInput = Console.ReadLine();
             int.TryParse(userInput, out selectedAmount);
         }
-        public int getPurchaseAmount()
+        public decimal getPurchaseAmount()
         {
             return selectedAmount;
         }
-
         public void SetTransactionAmount(Lemon newLemon, IceCube newIceCube, Cup newCup, SugarCubes newSugarCube)
         {
             if (selectedItem == "lemons")
             {
-                transactionAmount == newLemon.SetPrice() * getPurchaseAmount();
+                newLemon.SetPrice();
+                transactionAmount = newLemon.GetPrice() * getPurchaseAmount();         
             }
             else if (selectedItem == "cups")
             {
                 newCup.SetPrice();
+                transactionAmount = newCup.GetPrice() * getPurchaseAmount(); 
             }
             else if (selectedItem == "sugar cubes")
             {
                 newSugarCube.SetPrice();
+                transactionAmount = newSugarCube.GetPrice() * getPurchaseAmount();
             }
             else if (selectedItem == "ice cubes")
             {
                 newIceCube.SetPrice();
+                transactionAmount = newIceCube.GetPrice() * getPurchaseAmount(); 
             }
         }
-
-    
-        
     }
     
 }

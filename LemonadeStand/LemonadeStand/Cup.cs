@@ -8,25 +8,23 @@ namespace LemonadeStand
 {
     class Cup
     {
-        private double cupPrice;
+        private decimal cupPrice;
         public Cup()
         {
 
         }
         public void SetPrice()
         {
-            cupPrice = .10;
-            Console.WriteLine(cupPrice);
+            cupPrice = .10m;
+            //Console.WriteLine(cupPrice);
         }
-        public double GetPrice()
+        public decimal GetPrice()
         {
             return cupPrice;
         }
-        public void find()
-        {
-            Console.WriteLine(GetPrice());
-        }
-
-
+        //public void find()
+        //{
+        //    Console.WriteLine(GetPrice());
+        //}
     }
 }
