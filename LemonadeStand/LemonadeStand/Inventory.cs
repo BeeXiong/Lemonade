@@ -12,56 +12,65 @@ namespace LemonadeStand
         List<Cup> gameCups;
         List<SugarCubes> gameSugar;
         List<IceCube> gameIceCubes;
+        UserInterface userEntry;
+        Lemon newLemon;
+        Cup newCup;
+        SugarCubes newSugarCube;
+        IceCube newIceCube;
 
-        public Inventory()
+        public Inventory(UserInterface userEntry)
         {
             gameLemons = new List<Lemon>();
             gameCups = new List<Cup>();
             gameSugar = new List<SugarCubes>();
             gameIceCubes = new List<IceCube>();
+            this.userEntry = userEntry;
         }
-        public void SubtractInventory(Store storePurchase)//exemption??
+
+        public Inventory()
         {
-            for (int index = 1; index <= storePurchase.getPurchaseAmount(); index++ ) 
+        }
+
+        public void SubtractInventory()//exemption??
+        {
+            for (int index = 1; index <= userEntry.GetPurchaseAmount(); index++ ) 
             {
-                if (storePurchase.getPurchaseItem() == "lemons")
+                if (userEntry.GetItemSelection() == "lemons")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (storePurchase.getPurchaseItem() == "ice cubes")
+                else if (userEntry.GetItemSelection() == "ice cubes")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (storePurchase.getPurchaseItem() == "sugar cubes")
+                else if (userEntry.GetItemSelection() == "sugar cubes")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (storePurchase.getPurchaseItem() == "cups")
+                else if (userEntry.GetItemSelection() == "cups")
                 {
                     gameLemons.RemoveAt(0);
                 }
-
-
                 //merge list and for each the data type into a new list to compare agianst
             }
         }
-        public void AddInventory(Store storePurchase)
+        public void AddInventory()
         {
-            for (int index = 1; index <= storePurchase.getPurchaseAmount(); index++)
+            for (int index = 1; index <= userEntry.GetPurchaseAmount(); index++)
             {
-                if (storePurchase.getPurchaseItem() == "lemons")
+                if (userEntry.GetItemSelection() == "lemons")
                 {
                     gameLemons.Add(new Lemon());
                 }
-                else if (storePurchase.getPurchaseItem() == "ice cubes")
+                else if (userEntry.GetItemSelection() == "ice cubes")
                 {
                     gameIceCubes.Add(new IceCube());
                 }
-                else if (storePurchase.getPurchaseItem() == "sugar cubes")
+                else if (userEntry.GetItemSelection() == "sugar cubes")
                 {
                     gameSugar.Add(new SugarCubes());
                 }
-                else if (storePurchase.getPurchaseItem() == "cups")
+                else if (userEntry.GetItemSelection() == "cups")
                 {
                     gameCups.Add(new Cup());
                 }

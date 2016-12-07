@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Recipe
+    
+    class Wallet
     {
- 
-        public Recipe()
-        {
-             
-        }
+        public decimal playerBank;
 
+        public decimal GetPlayerBank()
+        {
+            return playerBank;
+        }
     }
+
 }
+

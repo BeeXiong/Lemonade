@@ -8,78 +8,65 @@ namespace LemonadeStand
 {
     class Store
     {
-        private string selectedItem;
-        private int selectedAmount;
         private decimal transactionAmount;
+        public HumanPlayer firstPlayer;
+        public Lemon newLemon;
+        public Cup newCup;
+        public SugarCubes newSugarCube;
+        public IceCube newIceCube;
 
-        public Store()
+        public Store(HumanPlayer firstPlayer,Lemon newLemon, Cup newCup, SugarCubes newSugarCube, IceCube newIceCube)
         {
-            
+            this.firstPlayer = firstPlayer;
+           
+            this.newLemon = newLemon;
+            this.newCup = newCup;
+            this.newSugarCube = newSugarCube;
+            this.newIceCube = newIceCube;
         }
 
-        public void IdentifyItem()//need a exemption handle for the amount of items a user picks
+        public void SetTransactionAmount()
         {
-            Console.WriteLine("What would you like to purchase?");
-            Console.WriteLine("Lemons");
-            Console.WriteLine("Ice Cubes");
-            Console.WriteLine("Sugar Cubes");
-            Console.WriteLine("Cups");
-            string userInput = Console.ReadLine().ToLower();
-            switch (userInput)
-            {
-                case "lemons":
-                case "ice cubes":
-                case "sugar cubes":
-                case "cups":
-                    setPurchaseItem(userInput);
-                    break;
-                default:
-                    Console.WriteLine("Invaild Entry. Please select either 'Lemons' - 'Ice Cubes' - 'Sugar Cubes' - 'Cups' ");
-                    IdentifyItem();
-                    break;
-            }
-        }
-        public void setPurchaseItem(string userInput)
-        {
-            selectedItem = userInput;
-        }
-        public string getPurchaseItem()
-        {
-            return selectedItem;
-        }
-        public void SetItemAmount()///need a exemption handle for the amount of items a user picks
-        {
-            Console.WriteLine("You have selected {0}", getPurchaseItem());
-            Console.WriteLine("How many {0} would you like to purchase", getPurchaseItem());
-            string userInput = Console.ReadLine();
-            int.TryParse(userInput, out selectedAmount);
-        }
-        public decimal getPurchaseAmount()
-        {
-            return selectedAmount;
-        }
-        public void SetTransactionAmount(Lemon newLemon, IceCube newIceCube, Cup newCup, SugarCubes newSugarCube)
-        {
-            if (selectedItem == "lemons")
+            if (firstPlayer.userEntry.GetItemSelection() == "lemons")
             {
                 newLemon.SetPrice();
-                transactionAmount = newLemon.GetPrice() * getPurchaseAmount();         
+                transactionAmount = newLemon.GetPrice() * firstPlayer.userEntry.GetPurchaseAmount();
             }
-            else if (selectedItem == "cups")
+            else if (firstPlayer.userEntry.GetItemSelection() == "cups")
             {
                 newCup.SetPrice();
-                transactionAmount = newCup.GetPrice() * getPurchaseAmount(); 
+                transactionAmount = newCup.GetPrice() * firstPlayer.userEntry.GetPurchaseAmount();
             }
-            else if (selectedItem == "sugar cubes")
+            else if (firstPlayer.userEntry.GetItemSelection() == "sugar cubes")
             {
                 newSugarCube.SetPrice();
-                transactionAmount = newSugarCube.GetPrice() * getPurchaseAmount();
+                transactionAmount = newSugarCube.GetPrice() * firstPlayer.userEntry.GetPurchaseAmount();
             }
-            else if (selectedItem == "ice cubes")
+            else if (firstPlayer.userEntry.GetItemSelection() == "ice cubes")
             {
                 newIceCube.SetPrice();
-                transactionAmount = newIceCube.GetPrice() * getPurchaseAmount(); 
+                transactionAmount = newIceCube.GetPrice() * firstPlayer.userEntry.GetPurchaseAmount();
             }
+        }
+        public decimal GetTransactionAmount()
+        {
+            return transactionAmount;
+        }
+        public void DisplayTransactionAmount()
+        {
+            Console.WriteLine(GetTransactionAmount());
+        }
+        public bool ConfirmFunds()
+        {
+            if (GetTransactionAmount() <= firstPlayer.playerWallet.playerBank)
+            {
+                return true; 
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
     

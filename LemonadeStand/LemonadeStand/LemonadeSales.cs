@@ -9,11 +9,11 @@ namespace LemonadeStand
     class LemonadeSales
     {
         private double salePrice;
-        public HumanPlayer firstPlayer;
+
         
         public LemonadeSales()
         {
-            firstPlayer = new HumanPlayer();
+            
            
         }
         public void GenerateSellingPrice()

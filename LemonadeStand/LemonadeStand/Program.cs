@@ -11,21 +11,10 @@ namespace LemonadeStand
         static void Main(string[] args)
         {
 
-            Store Test = new Store();
-            Lemon Testing = new Lemon();
-            Cup Tests = new Cup();
-            SugarCubes Testtest = new SugarCubes();
-            IceCube TestingTest = new IceCube();
-            Inventory Tester = new Inventory();
-           
 
-
-            Test.IdentifyItem();
-            Test.SetItemAmount();
-            Tester.AddInventory(Test);
-
-
-            Test.SetTransactionAmount(Testing,TestingTest,Tests,Testtest);
+            Game New = new Game();
+            New.GameLoop();
+            
             
 
             

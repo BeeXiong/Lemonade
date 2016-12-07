@@ -8,16 +8,10 @@ namespace LemonadeStand
 {
     class Player
     {
-        public double playerBank;
         public virtual void NamePlayers()
         {
 
         }
-        public virtual void DisplayPlayerBank()
-        {
 
-        }
     }
-
-
-}
+   }
