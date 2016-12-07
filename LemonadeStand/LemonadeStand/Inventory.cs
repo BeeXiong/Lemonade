@@ -12,42 +12,80 @@ namespace LemonadeStand
         List<Cup> gameCups;
         List<SugarCubes> gameSugar;
         List<IceCube> gameIceCubes;
-        UserInterface userEntry;
-        Lemon newLemon;
-        Cup newCup;
-        SugarCubes newSugarCube;
-        IceCube newIceCube;
+        public Lemon newLemon;
+        public Cup newCup;
+        public SugarCubes newSugarCube;
+        public IceCube newIceCube;
+        string inventoryItem;
+        decimal inventoryAmount;
+        
 
-        public Inventory(UserInterface userEntry)
+        public Inventory()
         {
             gameLemons = new List<Lemon>();
             gameCups = new List<Cup>();
             gameSugar = new List<SugarCubes>();
             gameIceCubes = new List<IceCube>();
-            this.userEntry = userEntry;
         }
-
-        public Inventory()
+        public void IdentifyInventoryItem()//need a exemption handle for the amount of items a user picks
         {
+            Console.WriteLine("What would you like?");
+            Console.WriteLine("Lemons");
+            Console.WriteLine("Ice Cubes");
+            Console.WriteLine("Sugar Cubes");
+            Console.WriteLine("Cups");
+            string userInput = Console.ReadLine().ToLower();
+            switch (userInput)
+            {
+                case "lemons":
+                case "ice cubes":
+                case "sugar cubes":
+                case "cups":
+                    SetInventoryItemSelection(userInput);
+                    break;
+                default:
+                    Console.WriteLine("Invaild Entry. Please select either 'Lemons' - 'Ice Cubes' - 'Sugar Cubes' - 'Cups' ");
+                    IdentifyInventoryItem();
+                    break;
+            }
         }
-
+        public void SetInventoryItemSelection(string userInput)
+        {
+            inventoryItem = userInput;
+        }
+        public string GetInventoryItemSelection()
+        {
+            return inventoryItem;
+        }
+        public void IdentifyInventoryAmount()///need a exemption handle for the amount of items a user picks
+        {
+            Console.WriteLine("You have selected {0}", GetInventoryItemSelection());
+            Console.WriteLine("How many {0} would you like", GetInventoryItemSelection());
+            string userInput = Console.ReadLine();
+            decimal.TryParse(userInput, out inventoryAmount);
+        }
+        public decimal GetInventoryAmount()
+        {
+            return inventoryAmount;
+        }
         public void SubtractInventory()//exemption??
         {
-            for (int index = 1; index <= userEntry.GetPurchaseAmount(); index++ ) 
+            string itemSelection = GetInventoryItemSelection();
+            for (int index = 1; index <= GetInventoryAmount(); index++) 
             {
-                if (userEntry.GetItemSelection() == "lemons")
+                if (itemSelection == "lemons")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (userEntry.GetItemSelection() == "ice cubes")
+                else if (itemSelection == "ice cubes")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (userEntry.GetItemSelection() == "sugar cubes")
+                else if (itemSelection == "sugar cubes")
                 {
                     gameLemons.RemoveAt(0);
                 }
-                else if (userEntry.GetItemSelection() == "cups")
+                else if (itemSelection == "cups")
                 {
                     gameLemons.RemoveAt(0);
                 }
@@ -56,23 +94,24 @@ namespace LemonadeStand
         }
         public void AddInventory()
         {
-            for (int index = 1; index <= userEntry.GetPurchaseAmount(); index++)
+            string itemSelection = GetInventoryItemSelection();
+            for (int index = 1; index <= GetInventoryAmount(); index++)
             {
-                if (userEntry.GetItemSelection() == "lemons")
+                if (itemSelection == "lemons")
                 {
-                    gameLemons.Add(new Lemon());
+                    gameLemons.Add(newLemon = new Lemon());
                 }
-                else if (userEntry.GetItemSelection() == "ice cubes")
+                else if (itemSelection == "ice cubes")
                 {
-                    gameIceCubes.Add(new IceCube());
+                    gameIceCubes.Add(newIceCube = new IceCube());
                 }
-                else if (userEntry.GetItemSelection() == "sugar cubes")
+                else if (itemSelection == "sugar cubes")
                 {
-                    gameSugar.Add(new SugarCubes());
+                    gameSugar.Add(newSugarCube = new SugarCubes());
                 }
-                else if (userEntry.GetItemSelection() == "cups")
+                else if (itemSelection == "cups")
                 {
-                    gameCups.Add(new Cup());
+                    gameCups.Add(newCup = new Cup());
                 }
             }
         }

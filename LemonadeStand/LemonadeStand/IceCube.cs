@@ -8,23 +8,11 @@ namespace LemonadeStand
 {
     class IceCube
     {
-        private decimal iceCubePrice;
+        
         public IceCube()
         {
     
         }
-        public void SetPrice()
-        {
-            iceCubePrice = .01m;
-            Console.WriteLine(iceCubePrice);
-        }
-        public decimal GetPrice()
-        {
-            return iceCubePrice;
-        }
-        public void find()
-        {
-            Console.WriteLine(GetPrice());
-        }
+
     }
 }

@@ -9,37 +9,55 @@ namespace LemonadeStand
     class Game
     {
         public Store purchasing;
-        public Inventory gameInventory;
         public HumanPlayer firstPlayer;
-        public Wallet playerWallet;
-        public Lemon newLemon;
-        public Cup newCup;
-        public SugarCubes newSugarCube;
-        public IceCube newIceCube;
-       
+        public UserInterface userEntry;
 
         public Game()
         {
-            purchasing = new Store(firstPlayer, newLemon, newCup, newSugarCube, newIceCube);
-            gameInventory = new Inventory();
-            firstPlayer = new HumanPlayer();
+            purchasing = new Store(firstPlayer);
+            userEntry = new UserInterface();
+            firstPlayer = new HumanPlayer();   
         }
         public void GameLoop()
         {
-            firstPlayer.userEntry.SelectGameLevel();
-
-
-            firstPlayer.userEntry.IdentifyItem();
-           
-           
+            firstPlayer.playerWallet.SelectGameLevel();
+            firstPlayer.playerWallet.SetBeginningPlayerBank();
+            firstPlayer.playerWallet.DisplayPlayerBank();
+            purchasing.IdentifyItem();
+            purchasing.IdentifyItemAmount();
             purchasing.SetTransactionAmount();
-            purchasing.DisplayTransactionAmount();
+            purchasing.SetConfirmation(firstPlayer);
+            purchasing.displayConfirmation();
+            purchasing.collectFunds(firstPlayer);
+            firstPlayer.playerWallet.DisplayPlayerBank();
+            firstPlayer.gameInventory.AddInventory();
 
-            //remove from wallet
-            gameInventory.AddInventory();
-            gameInventory.DisplayInventory();
-            purchasing.ConfirmFunds();
         }
+
+        //public void DisplayOptions()
+        //{
+        //    Console.WriteLine("What would you like to access? Please choose from one of the following: ");
+        //    Console.WriteLine("Rules");
+        //    Console.WriteLine("Store");
+        //    Console.WriteLine("Kitchen");
+        //    Console.WriteLine("Lemonade Sales");
+        //    string userinput = Console.ReadLine().ToLower();
+        //    switch (userinput)
+        //    {
+        //        case "Rules":
+        //            DisplayRules();
+        //            break;
+        //        case "Store":
+
+        //        case "Kitchen":
+        //        case "Lemonade Sales":
+        //            break;
+        //    }
+        //}
+
+
+
+
 
     }
 }

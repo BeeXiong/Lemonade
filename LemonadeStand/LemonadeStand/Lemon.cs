@@ -8,22 +8,11 @@ namespace LemonadeStand
 {
     class Lemon
     {
-        public decimal lemonprice;
+        
         public Lemon()
         {
             
         }
-        public void SetPrice()
-        {
-            lemonprice = .25m;   
-        }
-        public decimal GetPrice()
-        {
-            return lemonprice;
-        }
-        public void find()
-        {
-            Console.WriteLine(GetPrice());
-        }
+
     }
 }
