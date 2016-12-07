@@ -14,12 +14,12 @@ namespace LemonadeStand
 
         public Game()
         {
-            purchasing = new Store(firstPlayer);
+            purchasing = new Store();
             userEntry = new UserInterface();
             firstPlayer = new HumanPlayer();   
         }
         public void GameLoop()
-        {
+        { 
             firstPlayer.playerWallet.SelectGameLevel();
             firstPlayer.playerWallet.SetBeginningPlayerBank();
             firstPlayer.playerWallet.DisplayPlayerBank();
@@ -27,10 +27,10 @@ namespace LemonadeStand
             purchasing.IdentifyItemAmount();
             purchasing.SetTransactionAmount();
             purchasing.SetConfirmation(firstPlayer);
-            purchasing.displayConfirmation();
-            purchasing.collectFunds(firstPlayer);
+            purchasing.CompleteItemSale(firstPlayer);
             firstPlayer.playerWallet.DisplayPlayerBank();
-            firstPlayer.gameInventory.AddInventory();
+            
+
 
         }
 

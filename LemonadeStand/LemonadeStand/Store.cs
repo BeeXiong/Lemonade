@@ -16,15 +16,15 @@ namespace LemonadeStand
         private decimal iceCubePrice;
         private decimal sugarCubePrice;
         bool confirmation;
-        HumanPlayer firstPlayer;
         
-        public Store(HumanPlayer firstPlayer)
+        
+        public Store()
         {
-            this.firstPlayer = firstPlayer;
+            
         }
         public void IdentifyItem()//need a exemption handle for the amount of items a user picks
         {
-            Console.WriteLine("What would you like?");
+            Console.WriteLine("What would you like to purchase?");
             Console.WriteLine("Lemons");
             Console.WriteLine("Ice Cubes");
             Console.WriteLine("Sugar Cubes");
@@ -138,8 +138,6 @@ namespace LemonadeStand
                 transactionAmount = GetIceCubePrice() * GetPurchaseAmount();
             }
         }
-
-
         public decimal GetTransactionAmount()
         {
             return transactionAmount;
@@ -154,25 +152,36 @@ namespace LemonadeStand
             {
                 confirmation = true;
             }
-            else
-            {
-                confirmation = false;
-            }
         }
         public bool getConfirmation()
         {
             return confirmation;
         }
-        public void displayConfirmation()
+        public void CompleteItemSale(HumanPlayer firstPlayer)
         {
-            Console.WriteLine("{0}", getConfirmation());
-        }
-        public void collectFunds(HumanPlayer firstPlayer)
-        {
-            if (getConfirmation() == true)
+            if (getConfirmation() == true && purchaseItem == "lemons")
             {
                 decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
                 firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
+                firstPlayer.AddLemonInventory(GetPurchaseAmount());
+            }
+            if (getConfirmation() == true && purchaseItem == "cups")
+            {
+                decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
+                firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
+                firstPlayer.AddCupInventory(GetPurchaseAmount());
+            }
+            if (getConfirmation() == true && purchaseItem == "sugar cubes")
+            {
+                decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
+                firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
+                firstPlayer.AddSugarCubeInventory(GetPurchaseAmount());
+            }
+            if (getConfirmation() == true && purchaseItem == "ice cubes")
+            {
+                decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
+                firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
+                firstPlayer.AddIceCubeInventory(GetPurchaseAmount());
             }
         }
     }
