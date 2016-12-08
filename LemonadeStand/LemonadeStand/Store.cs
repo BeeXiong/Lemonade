@@ -16,8 +16,6 @@ namespace LemonadeStand
         private decimal iceCubePrice;
         private decimal sugarCubePrice;
         bool confirmation;
-        
-        
         public Store()
         {
             

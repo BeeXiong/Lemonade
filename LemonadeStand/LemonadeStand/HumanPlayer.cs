@@ -10,14 +10,16 @@ namespace LemonadeStand
     {
         public Wallet playerWallet;
         public Inventory gameInventory;
+        public Recipe gameRecipe;
         string inventoryItem;
         decimal inventoryAmount;
+        decimal lemonadeCupAmount;
 
         public HumanPlayer()
         {
             playerWallet = new Wallet();
             gameInventory = new Inventory();
-
+            gameRecipe = new Recipe();
         }
         public void IdentifyInventoryItem()//need a exemption handle for the amount of items a user picks
         {
@@ -81,7 +83,6 @@ namespace LemonadeStand
                 {
                     gameInventory.gameLemons.RemoveAt(0);
                 }
-                //merge list and for each the data type into a new list to compare agianst
             }
         }
         public void AddLemonInventory(decimal Lemons)
@@ -89,7 +90,6 @@ namespace LemonadeStand
             for (int index = 1; index <= Lemons; index++)
             {
                 gameInventory.gameLemons.Add(gameInventory.newLemon = new Lemon());
-              
             }
         }
         public void AddIceCubeInventory(decimal iceCubes)
@@ -97,15 +97,13 @@ namespace LemonadeStand
             for (int index = 1; index <= iceCubes; index++)
             {
                 gameInventory.gameIceCubes.Add(gameInventory.newIceCube = new IceCube());
-
             }
         }
         public void AddSugarCubeInventory(decimal sugarCube)
         {
             for (int index = 1; index <= sugarCube; index++)
             {
-                gameInventory.gameSugar.Add(gameInventory.newSugarCube = new SugarCubes());
-
+                gameInventory.gameSugarCubes.Add(gameInventory.newSugarCube = new SugarCubes());
             }
         }
         public void AddCupInventory(decimal cups)
@@ -113,15 +111,56 @@ namespace LemonadeStand
             for (int index = 1; index <= cups; index++)
             {
                 gameInventory.gameCups.Add(gameInventory.newCup = new Cup());
-
             }
         }
-
         public override void NamePlayers()
         {
             base.NamePlayers();
         }
-
-        
+        public void SetDailyLemonadeCupInventory()///need a exemption handle for the amount of items a user picks
+        {
+            Console.WriteLine("Lets make some Lemonade!");
+            Console.WriteLine("How many cups would you like to make?");
+            string userInput = Console.ReadLine();
+            decimal.TryParse(userInput, out lemonadeCupAmount);
+        }
+        public decimal GetLemonCupAmount()
+        {
+            return lemonadeCupAmount;
+        }
+        public void VeryifyCupAmount()
+        {
+            if (gameInventory.GetCupQuantity() < GetLemonCupAmount())
+            {
+                Console.WriteLine("I'm sorry. You didn't have enough cups");
+                SetDailyLemonadeCupInventory();
+            }
+        }
+        public void SetLemonCupTaste()
+        {
+            gameRecipe.ChooseIngredients();
+            gameRecipe.VeryifyLemonAmount((gameInventory.GetLemonQuantity()));
+            gameRecipe.VeryifyIceCubeAmount((gameInventory.GetIceCubeQuantity()));
+            gameRecipe.VeryifySugarAmount((gameInventory.GetSugarCubeQuantity()));
+            VeryifyCupAmount();
+        }
+        public void MakeLemonadeCups()
+        {
+            for (int index = 1; index <= GetLemonCupAmount(); index++)
+            {
+                if (gameRecipe.GetSourTaste() == true)
+                {
+                    gameInventory.sourLemonadeCups.Add(gameInventory.newSourLemonadeCup = new LemonadeCup());
+                }
+                if (gameRecipe.GetSweetTaste() == true)
+                {
+                    gameInventory.SweetLemonadeCups.Add(gameInventory.newSweetLemonadeCup = new LemonadeCup());
+                }
+                if (gameRecipe.GetNuetralTaste() == true)
+                {
+                    gameInventory.NuetralLemonadeCups.Add(gameInventory.newNuetralLemonadeCup = new LemonadeCup());
+                }
+            }
+        }
     }
 }

@@ -23,15 +23,17 @@ namespace LemonadeStand
             firstPlayer.playerWallet.SelectGameLevel();
             firstPlayer.playerWallet.SetBeginningPlayerBank();
             firstPlayer.playerWallet.DisplayPlayerBank();
+
             purchasing.IdentifyItem();
             purchasing.IdentifyItemAmount();
             purchasing.SetTransactionAmount();
             purchasing.SetConfirmation(firstPlayer);
             purchasing.CompleteItemSale(firstPlayer);
+            firstPlayer.gameInventory.DisplayInventory();
             firstPlayer.playerWallet.DisplayPlayerBank();
-            
-
-
+            firstPlayer.SetDailyLemonadeCupInventory();
+            firstPlayer.SetLemonCupTaste();
+            firstPlayer.MakeLemonadeCups();
         }
 
         //public void DisplayOptions()

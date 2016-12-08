@@ -13,7 +13,6 @@ namespace LemonadeStand
         
         public LemonadeSales()
         {
-            
            
         }
         public void GenerateSellingPrice()

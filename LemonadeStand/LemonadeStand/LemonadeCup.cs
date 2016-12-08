@@ -8,15 +8,11 @@ namespace LemonadeStand
 {
     class LemonadeCup
     {
-        List<LemonadeCup> cupofLemonade;
 
         public LemonadeCup()
         {
-            cupofLemonade = new List<LemonadeCup>();
+            
         }
-        public void MakeCups()
-        {
 
-        }
     }
 }
