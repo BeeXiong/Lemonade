@@ -9,8 +9,6 @@ namespace LemonadeStand
     class LemonadeSales
     {
         private double salePrice;
-
-        
         public LemonadeSales()
         {
            

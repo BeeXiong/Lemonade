@@ -8,10 +8,17 @@ namespace LemonadeStand
 {
     class Day
     {
-        int gameDays;
-        public void IdentifyGameDays()
+        public List<Day> totalGameDays;
+        public Weather conditions;
+        public Day()
+        {
+            totalGameDays = new List<Day>();
+            conditions = new Weather();
+        }
+        public void GenerateConditions()
         {
 
         }
+
     }
 }

@@ -14,6 +14,7 @@ namespace LemonadeStand
         private int lemonAmount;
         private int sugarAmount;
         private int iceCubeAmount;
+        private string itemSelection;
         public Recipe()
         {
 
@@ -24,23 +25,44 @@ namespace LemonadeStand
             Console.WriteLine("Lemons");
             Console.WriteLine("Ice Cubes");
             Console.WriteLine("Sugar Cubes");
-            string userInput = Console.ReadLine().ToLower();
-            switch (userInput)
+            string userfeedback = Console.ReadLine().ToLower();
+            switch (userfeedback)
             {
                 case "lemons":
                     SetLemonAmount();
+                    SetItemSelection(userfeedback);
+                    
                     break;
                 case "ice cubes":
                     SetIceCubes();
+                    SetItemSelection(userfeedback);
+                    
                     break;
                 case "sugar cubes":
                     SetSugarCubes();
+                    SetItemSelection(userfeedback);
+                    
                     break;
                 default:
                     Console.WriteLine("Invaild Entry. Please select either 'Lemons' - 'Ice Cubes' - 'Sugar Cubes' ");
                     ChooseIngredients();
                     break;
             }
+        }
+        public void DisplaySelectedIngredients()
+        {
+            Console.WriteLine("Okay. Here are the ingredients you picked so far.");
+            Console.WriteLine("Lemons {0}", GetLemonAmount());
+            Console.WriteLine("Sugar Cubes {0}", GetSugarAmount());
+            Console.WriteLine("Ice Cubes {0}", GetIceCubeAmount());
+        }
+        public void SetItemSelection(string userInput)
+        {
+            itemSelection = userInput;
+        }
+        public string GetItemSelection()
+        {
+            return itemSelection;
         }
         public void SetLemonAmount()
         {
@@ -132,7 +154,6 @@ namespace LemonadeStand
         {
             return sweetTaste;
         }
-
         public bool GetSourTaste()
         {
             return sourTaste;

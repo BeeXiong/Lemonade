@@ -10,30 +10,64 @@ namespace LemonadeStand
     {
         public Store purchasing;
         public HumanPlayer firstPlayer;
-        public UserInterface userEntry;
+        public UserInterface userDisplay;
+        public Day gameDay;
+        public int userDeterminedGameDay;
 
         public Game()
         {
             purchasing = new Store();
-            userEntry = new UserInterface();
-            firstPlayer = new HumanPlayer();   
+            userDisplay = new UserInterface();
+            firstPlayer = new HumanPlayer();
+            gameDay = new Day();
         }
         public void GameLoop()
-        { 
+        {
             firstPlayer.playerWallet.SelectGameLevel();
             firstPlayer.playerWallet.SetBeginningPlayerBank();
             firstPlayer.playerWallet.DisplayPlayerBank();
+            //SetGameDays();
+            //AddGameDays();
+            //SetWeatherConditions();
+            //AddWeatherConditions();
 
             purchasing.IdentifyItem();
             purchasing.IdentifyItemAmount();
             purchasing.SetTransactionAmount();
             purchasing.SetConfirmation(firstPlayer);
             purchasing.CompleteItemSale(firstPlayer);
+
             firstPlayer.gameInventory.DisplayInventory();
             firstPlayer.playerWallet.DisplayPlayerBank();
             firstPlayer.SetDailyLemonadeCupInventory();
             firstPlayer.SetLemonCupTaste();
             firstPlayer.MakeLemonadeCups();
+        }
+        public void SetGameDays()
+        {
+            Console.WriteLine("How many days would you like to play");
+            string userInput = Console.ReadLine();
+            userDeterminedGameDay = Convert.ToInt16(userInput);
+        }
+        public void AddGameDays()
+        {
+            for (int index = 1; index <= userDeterminedGameDay; index++)
+            {
+                gameDay.totalGameDays.Add(new Day());
+            }
+        }
+        public void SetWeatherConditions()
+        {
+            Console.WriteLine("How many days would you like to play");
+            string userInput = Console.ReadLine();
+            userDeterminedGameDay = Convert.ToInt16(userInput);
+        }
+        public void AddWeatherConditions()
+        {
+            for (int index = 1; index <= userDeterminedGameDay; index++)
+            {
+                gameDay.conditions.weatherConditions.Add(new Weather());
+            }
         }
 
         //public void DisplayOptions()

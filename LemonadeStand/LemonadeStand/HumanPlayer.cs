@@ -13,7 +13,6 @@ namespace LemonadeStand
         public Recipe gameRecipe;
         string inventoryItem;
         decimal inventoryAmount;
-        decimal lemonadeCupAmount;
 
         public HumanPlayer()
         {
@@ -62,29 +61,6 @@ namespace LemonadeStand
         {
             return inventoryAmount;
         }
-        public void SubtractInventory()//exemption??
-        {
-            string itemSelection = GetInventoryItemSelection();
-            for (int index = 1; index <= GetInventoryAmount(); index++)
-            {
-                if (itemSelection == "lemons")
-                {
-                    gameInventory.gameLemons.RemoveAt(0);
-                }
-                else if (itemSelection == "ice cubes")
-                {
-                    gameInventory.gameLemons.RemoveAt(0);
-                }
-                else if (itemSelection == "sugar cubes")
-                {
-                    gameInventory.gameLemons.RemoveAt(0);
-                }
-                else if (itemSelection == "cups")
-                {
-                    gameInventory.gameLemons.RemoveAt(0);
-                }
-            }
-        }
         public void AddLemonInventory(decimal Lemons)
         {
             for (int index = 1; index <= Lemons; index++)
@@ -122,15 +98,11 @@ namespace LemonadeStand
             Console.WriteLine("Lets make some Lemonade!");
             Console.WriteLine("How many cups would you like to make?");
             string userInput = Console.ReadLine();
-            decimal.TryParse(userInput, out lemonadeCupAmount);
-        }
-        public decimal GetLemonCupAmount()
-        {
-            return lemonadeCupAmount;
+            decimal.TryParse(userInput, out inventoryAmount);
         }
         public void VeryifyCupAmount()
         {
-            if (gameInventory.GetCupQuantity() < GetLemonCupAmount())
+            if (gameInventory.GetCupQuantity() < GetInventoryAmount())
             {
                 Console.WriteLine("I'm sorry. You didn't have enough cups");
                 SetDailyLemonadeCupInventory();
@@ -146,7 +118,7 @@ namespace LemonadeStand
         }
         public void MakeLemonadeCups()
         {
-            for (int index = 1; index <= GetLemonCupAmount(); index++)
+            for (int index = 1; index <= GetInventoryAmount(); index++)
             {
                 if (gameRecipe.GetSourTaste() == true)
                 {
@@ -159,6 +131,29 @@ namespace LemonadeStand
                 if (gameRecipe.GetNuetralTaste() == true)
                 {
                     gameInventory.NuetralLemonadeCups.Add(gameInventory.newNuetralLemonadeCup = new LemonadeCup());
+                }
+            }
+        }
+                    public void SubtractInventory()//exemption??
+        {
+            string itemSelection = gameRecipe.GetItemSelection();
+            for (int index = 1; index <= GetInventoryAmount(); index++)
+            {
+                if (itemSelection == "lemons")
+                {
+                    gameInventory.gameLemons.RemoveAt(0);
+                }
+                else if (itemSelection == "ice cubes")
+                {
+                    gameInventory.gameLemons.RemoveAt(0);
+                }
+                else if (itemSelection == "sugar cubes")
+                {
+                    gameInventory.gameLemons.RemoveAt(0);
+                }
+                else if (itemSelection == "cups")
+                {
+                    gameInventory.gameLemons.RemoveAt(0);
                 }
             }
         }

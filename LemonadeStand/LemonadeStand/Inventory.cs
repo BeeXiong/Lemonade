@@ -68,7 +68,6 @@ namespace LemonadeStand
         {
             return sugarCubeQuantity;
         }
-
         public void ReviewCupQuantity()
         {
             cupQuantity = gameCups.Count;

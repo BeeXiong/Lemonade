@@ -155,31 +155,61 @@ namespace LemonadeStand
         {
             return confirmation;
         }
-        public void CompleteItemSale(HumanPlayer firstPlayer)
+        public void CompleteItemSale(HumanPlayer firstPlayer)///bug
         {
             if (getConfirmation() == true && purchaseItem == "lemons")
             {
                 decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
                 firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
                 firstPlayer.AddLemonInventory(GetPurchaseAmount());
+                firstPlayer.gameInventory.DisplayInventory();
+                firstPlayer.playerWallet.DisplayPlayerBank();
+                ContinueShopping();
             }
-            if (getConfirmation() == true && purchaseItem == "cups")
+            else if (getConfirmation() == true && purchaseItem == "cups")
             {
                 decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
                 firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
                 firstPlayer.AddCupInventory(GetPurchaseAmount());
+                firstPlayer.gameInventory.DisplayInventory();
+                firstPlayer.playerWallet.DisplayPlayerBank();
+                ContinueShopping();
             }
-            if (getConfirmation() == true && purchaseItem == "sugar cubes")
+            else if (getConfirmation() == true && purchaseItem == "sugar cubes")
             {
                 decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
                 firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
                 firstPlayer.AddSugarCubeInventory(GetPurchaseAmount());
+                firstPlayer.gameInventory.DisplayInventory();
+                firstPlayer.playerWallet.DisplayPlayerBank();
+                ContinueShopping();
             }
-            if (getConfirmation() == true && purchaseItem == "ice cubes")
+            else if (getConfirmation() == true && purchaseItem == "ice cubes")
             {
                 decimal AmountRemaning = firstPlayer.playerWallet.GetPlayerBank() - GetTransactionAmount();
                 firstPlayer.playerWallet.SetPlayerBank(AmountRemaning);
                 firstPlayer.AddIceCubeInventory(GetPurchaseAmount());
+                firstPlayer.gameInventory.DisplayInventory();
+                firstPlayer.playerWallet.DisplayPlayerBank();
+                ContinueShopping();
+            }
+        }
+        public void ContinueShopping()
+        {
+            Console.WriteLine("Would you like to keep shopping? 'Yes' or 'No' ");
+            string userinput = Console.ReadLine().ToLower();
+            if (userinput == "yes")
+            {
+                IdentifyItem();
+            }
+            else if (userinput == "no")
+            {
+                Console.WriteLine("Okay!");
+            }
+            else
+            {
+                Console.WriteLine("I'm sorry. Please pick 'Yes' or 'No'");
+                ContinueShopping();
             }
         }
     }
