@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Recipe
+    public class Recipe
     {
         private bool nuetralTaste;
         private bool sourTaste;
         private bool sweetTaste;
-        private int lemonAmount;
-        private int sugarAmount;
+        public int lemonAmount;
+        public int sugarAmount;
         private int iceCubeAmount;
         private string itemSelection;
         public Recipe()
@@ -70,12 +70,16 @@ namespace LemonadeStand
             string lemonChoice = Console.ReadLine();
             lemonAmount = (Convert.ToInt16(lemonChoice));
         }
-        public void VeryifyLemonAmount(decimal inventoryAmount)
+        public bool VeryifyLemonAmount(decimal inventoryAmount)
         {
-            if (GetLemonAmount() >= 11 || GetLemonAmount() > inventoryAmount && GetLemonAmount() < 1)
+            if (GetLemonAmount() <= 11 && GetLemonAmount() < inventoryAmount && GetLemonAmount() > 1)
+            {
+                return true;
+            }
+            else
             {
                 Console.WriteLine("Please check to make sure you have enough lemons and make sure you are using between 1 and 10 lemons");
-                ChooseIngredients();
+                return false;
             }
         }
         public int GetLemonAmount()

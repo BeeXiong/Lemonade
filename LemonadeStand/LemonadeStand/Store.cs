@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Store
+    public class Store
     {
         string purchaseItem;
-        decimal purchaseAmount;
+        public decimal purchaseAmount;
         decimal transactionAmount;
-        public decimal lemonprice;
+        private decimal lemonprice;
         private decimal cupPrice;
         private decimal iceCubePrice;
         private decimal sugarCubePrice;

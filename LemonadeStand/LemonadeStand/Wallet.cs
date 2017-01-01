@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace LemonadeStand
 {
     
-    class Wallet
+    public class Wallet
     {
         private string selectedItem;
-        protected decimal playerBank;
+        private decimal playerBank;
         public void SelectGameLevel()
         {
             Console.WriteLine("Please select game level. 'Easy' - 'Medium' - 'Hard' ");

@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class HumanPlayer : Player
+    public class HumanPlayer : Player
     {
         public Wallet playerWallet;
         public Inventory gameInventory;
         public Recipe gameRecipe;
         string inventoryItem;
-        decimal inventoryAmount;
+        public decimal inventoryAmount;
+        public string InventoryItem { get;  set; }
 
         public HumanPlayer()
         {
@@ -73,7 +74,7 @@ namespace LemonadeStand
             for (int index = 1; index <= iceCubes; index++)
             {
                 gameInventory.gameIceCubes.Add(gameInventory.newIceCube = new IceCube());
-            }
+             }
         }
         public void AddSugarCubeInventory(decimal sugarCube)
         {
@@ -88,10 +89,6 @@ namespace LemonadeStand
             {
                 gameInventory.gameCups.Add(gameInventory.newCup = new Cup());
             }
-        }
-        public override void NamePlayers()
-        {
-            base.NamePlayers();
         }
         public void SetDailyLemonadeCupInventory()///need a exemption handle for the amount of items a user picks
         {
@@ -134,7 +131,7 @@ namespace LemonadeStand
                 }
             }
         }
-                    public void SubtractInventory()//exemption??
+        public void SubtractInventory()//exemption??
         {
             string itemSelection = gameRecipe.GetItemSelection();
             for (int index = 1; index <= GetInventoryAmount(); index++)
@@ -145,15 +142,15 @@ namespace LemonadeStand
                 }
                 else if (itemSelection == "ice cubes")
                 {
-                    gameInventory.gameLemons.RemoveAt(0);
+                    gameInventory.gameIceCubes.RemoveAt(0);
                 }
                 else if (itemSelection == "sugar cubes")
                 {
-                    gameInventory.gameLemons.RemoveAt(0);
+                    gameInventory.gameSugarCubes.RemoveAt(0);
                 }
                 else if (itemSelection == "cups")
                 {
-                    gameInventory.gameLemons.RemoveAt(0);
+                    gameInventory.gameCups.RemoveAt(0);
                 }
             }
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LemonadeStand
 {
-    class Game
+    public class Game
     {
         public Store purchasing;
         public HumanPlayer firstPlayer;
@@ -35,13 +35,15 @@ namespace LemonadeStand
             purchasing.IdentifyItemAmount();
             purchasing.SetTransactionAmount();
             purchasing.SetConfirmation(firstPlayer);
-            purchasing.CompleteItemSale(firstPlayer);
-
+             purchasing.CompleteItemSale(firstPlayer);
+            firstPlayer.AddIceCubeInventory(firstPlayer.gameInventory.GetIceCubeQuantity());
             firstPlayer.gameInventory.DisplayInventory();
             firstPlayer.playerWallet.DisplayPlayerBank();
             firstPlayer.SetDailyLemonadeCupInventory();
             firstPlayer.SetLemonCupTaste();
             firstPlayer.MakeLemonadeCups();
+            firstPlayer.SubtractInventory();
+            
         }
         public void SetGameDays()
         {
