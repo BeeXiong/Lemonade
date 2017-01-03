@@ -8,9 +8,7 @@ namespace LemonadeStandv2._0
 {
     class Weather
     {
-        List<Weather> DailyConditions;
-        public int Temperature { get; set; }
-        public int WeatherCondition { get; set; }
-
+        public decimal Temperature { get; set; }
+        public string WeatherCondition { get; set; }
     }
 }

@@ -8,7 +8,6 @@ namespace LemonadeStandv2._0
 {
     class Player
     {
-        public string playerName { get; set;  }
         Wallet playerWallet;
         Inventory gameInventory;
         public Player()

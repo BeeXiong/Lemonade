@@ -8,5 +8,15 @@ namespace LemonadeStandv2._0
 {
     class Human : Player
     {
+        public string PlayerName { get; set; }
+        public Human()
+        {
+            NamePlayers();
+        }
+        public void NamePlayers()
+        {
+            Console.WriteLine("Please enter the name for this Player");
+            PlayerName = Console.ReadLine();
+        }
     }
 }
