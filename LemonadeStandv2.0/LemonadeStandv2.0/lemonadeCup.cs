@@ -9,5 +9,9 @@ namespace LemonadeStandv2._0
     class LemonadeCup
     {
         public decimal Price { get; private set; }
+        public LemonadeCup(decimal Price)//allows you to construct a lemonade cup with a different price
+        {
+            this.Price = Price; 
+        }
     }
 }

@@ -8,6 +8,21 @@ namespace LemonadeStandv2._0
 {
     class IceCube
     {
-        public decimal Price { get; private set; }
+        static decimal price = .01m;
+        public static decimal Price
+        {
+            get
+            {
+                return price;
+            }
+            private set
+            {
+                price = value;
+            }
+        }
+        public IceCube()
+        {
+            Price = .01m;
+        }
     }
 }

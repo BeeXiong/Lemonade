@@ -18,5 +18,37 @@ namespace LemonadeStandv2._0
             Console.WriteLine("Please enter the name for this Player");
             PlayerName = Console.ReadLine();
         }
+        public void AddPurchaseItemToInventory(string item, decimal quantity, bool confirmedPurchase, bool confirmedFunds)
+        {
+            int i;
+            if(confirmedPurchase == true && confirmedFunds == true && item == "lemons")
+            {
+                for (i=0; i<quantity; i++)
+                {
+                    gameInventory.gameLemons.Add(new Lemon());
+                }   
+            }
+            else if (confirmedPurchase == true && confirmedFunds == true && item == "ice cubes")
+            {
+                for (i = 0; i < quantity; i++)
+                {
+                    gameInventory.gameIceCubes.Add(new IceCube());
+                }
+            }
+            else if (confirmedPurchase == true && confirmedFunds == true && item == "sugar cubes")
+            {
+                for (i = 0; i < quantity; i++)
+                {
+                    gameInventory.gameSugarCubes.Add(new SugarCube());
+                }
+            }
+            else if (confirmedPurchase == true && confirmedFunds == true && item == "cups")
+            {
+                for (i = 0; i < quantity; i++)
+                {
+                    gameInventory.gameCups.Add(new Cup());
+                }
+            }
+        }
     }
 }

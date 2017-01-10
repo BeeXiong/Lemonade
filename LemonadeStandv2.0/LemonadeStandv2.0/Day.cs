@@ -9,10 +9,10 @@ namespace LemonadeStandv2._0
     class Day
     {
         Weather weatherCondition;
-        Random rnd = new Random();
-
+        Random rnd;
         public Day()
         {
+            rnd = new Random();
             SetWeatherConditions();
             SetTemp();
         }
@@ -31,7 +31,8 @@ namespace LemonadeStandv2._0
             else if (Random * 2 % 2 != 0)
             {
                 weatherCondition.WeatherCondition = "sunny";
-            }                else
+            }
+            else
             {
                 weatherCondition.WeatherCondition = "sunny";
             }         

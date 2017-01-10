@@ -8,13 +8,12 @@ namespace LemonadeStandv2._0
 {
     class Player
     {
-        Wallet playerWallet;
-        Inventory gameInventory;
+        public Wallet playerWallet;
+        public Inventory gameInventory;
         public Player()
         {
             playerWallet = new Wallet();
             gameInventory = new Inventory();
         }
-
     }
 }

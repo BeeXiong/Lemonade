@@ -30,6 +30,14 @@ namespace LemonadeStandv2._0
             Console.WriteLine("\r\nPlayers must maintain a balance of at least $.01 to continue playing");
             Console.WriteLine("Players will need to go bankrupt to start again.");
         }
+        public void DisplayOptions()
+        {
+            Console.WriteLine("What would you like to access? Please choose from one of the following: ");
+            Console.WriteLine("Rules");
+            Console.WriteLine("Store");
+            Console.WriteLine("Kitchen");
+            Console.WriteLine("Lemonade Sales");
+        }
         public void ClearScreen()
         {
             Console.Clear();

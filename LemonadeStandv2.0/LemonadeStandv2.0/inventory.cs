@@ -8,11 +8,11 @@ namespace LemonadeStandv2._0
 {
     class Inventory
     {
-        List<Lemon> gameLemons;
-        List<LemonadeCup> gameLemonadeCups;
-        List<SugarCube> gameSugarCubes;
-        List<IceCube> gameIceCubes;
-        List<Cup> gameCups;
+        public List<Lemon> gameLemons;
+        public List<LemonadeCup> gameLemonadeCups;
+        public List<SugarCube> gameSugarCubes;
+        public List<IceCube> gameIceCubes;
+        public List<Cup> gameCups;
         public Inventory()
         {
             gameLemons = new List<Lemon>();
