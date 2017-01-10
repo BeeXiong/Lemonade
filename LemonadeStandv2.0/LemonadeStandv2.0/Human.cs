@@ -50,5 +50,34 @@ namespace LemonadeStandv2._0
                 }
             }
         }
+        public void CreateLemonadeCups(string lemonadeTaste, int amountToMake, decimal sellingPrice, Human gamePlayer)
+        {
+            int i;
+            for (i = 1; i <= amountToMake; i++)
+            {
+                gamePlayer.gameInventory.gameLemonadeCups.Add(new LemonadeCup(sellingPrice, lemonadeTaste));
+            }
+        }
+
+        public void RemoveInventory(int lemonAmount, int iceCubeAmount, int sugarCubeAmount, int cupAmount)
+        {
+            int i;
+            for (i=0; i<=lemonAmount; i++)
+            {
+                gameInventory.gameLemons.RemoveAt(0);
+            }
+            for (i = 0; i <= iceCubeAmount; i++)
+            {
+                gameInventory.gameIceCubes.RemoveAt(0);
+            }
+            for(i = 0; i <= sugarCubeAmount; i++)
+            {
+                gameInventory.gameSugarCubes.RemoveAt(0);
+            }
+            for (i = 0; i <= cupAmount; i++)
+            {
+                gameInventory.gameCups.RemoveAt(0);
+            }
+        }
     }
 }

@@ -9,6 +9,6 @@ namespace LemonadeStandv2._0
     class Weather
     {
         public decimal Temperature { get; set; }
-        public string WeatherCondition { get; set; }
+        public string Condition { get; set; }
     }
 }

@@ -10,31 +10,67 @@ namespace LemonadeStandv2._0
     {
         Weather weatherCondition;
         Random rnd;
-        public Day()
+        List<Customer> lemonadeCustomers;
+        public Day(Random rndNumber)
         {
-            rnd = new Random();
+            rnd = rndNumber;
             SetWeatherConditions();
             SetTemp();
+            lemonadeCustomers = new List<Customer>();
+            int totalCustomers;
+            totalCustomers = GenerateTotalCustomers(rnd);
+            AddCustomers(totalCustomers);
         }
-        public void SetWeatherConditions()
+        public int GenerateTotalCustomers(Random number)
         {
-            int Random = rnd.Next(50, 90);
-            weatherCondition = new Weather();
-            if (Random % 5 == 0)
+            int totalCustomers;
+            if (weatherCondition.Temperature > 80 && weatherCondition.Condition == "sunny" || weatherCondition.Condition == "cloudy")//ideal situation
             {
-                weatherCondition.WeatherCondition = "raining";
+                totalCustomers = number.Next(50, 100);
+                return totalCustomers;
             }
-            else if (Random * 3 % 2 == 0)
+            else if (weatherCondition.Temperature < 55 || weatherCondition.Condition == "raining")// terrible day
             {
-                weatherCondition.WeatherCondition = "cloudy";
+                totalCustomers = rnd.Next(1, 40);
+                return totalCustomers;
             }
-            else if (Random * 2 % 2 != 0)
+            else if (weatherCondition.Temperature < 79 && (weatherCondition.Condition == "sunny" || weatherCondition.Condition == "cloudy"))// okay day
             {
-                weatherCondition.WeatherCondition = "sunny";
+                totalCustomers = rnd.Next(30, 70);
+                return totalCustomers;
             }
             else
             {
-                weatherCondition.WeatherCondition = "sunny";
+                return default(int);
+            }
+        }
+        public void AddCustomers(int customerAmount)
+        {
+            int i;
+            for (i = 0; i < customerAmount; i++)
+            {
+                lemonadeCustomers.Add(new Customer(rnd));
+            }
+        }
+        public void SetWeatherConditions()
+        {
+            int Random = rnd.Next(50, 85);
+            weatherCondition = new Weather();
+            if (Random % 5 == 0)
+            {
+                weatherCondition.Condition = "raining";
+            }
+            else if (Random * 3 % 2 == 0)
+            {
+                weatherCondition.Condition = "cloudy";
+            }
+            else if (Random * 2 % 2 != 0)
+            {
+                weatherCondition.Condition = "sunny";
+            }
+            else
+            {
+                weatherCondition.Condition = "sunny";
             }         
         }
         public void SetTemp()

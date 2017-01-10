@@ -35,8 +35,9 @@ namespace LemonadeStandv2._0
             Console.WriteLine("What would you like to access? Please choose from one of the following: ");
             Console.WriteLine("Rules");
             Console.WriteLine("Store");
-            Console.WriteLine("Kitchen");
-            Console.WriteLine("Lemonade Sales");
+            Console.WriteLine("Sell");
+            Console.WriteLine("Track Sales");
+            Console.WriteLine("To finish your day, please type 'Finish Day'");
         }
         public void ClearScreen()
         {
