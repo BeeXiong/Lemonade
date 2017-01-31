@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace LemonadeStandv2._0
 {
@@ -15,8 +16,18 @@ namespace LemonadeStandv2._0
         }
         public void NamePlayers()
         {
-            Console.WriteLine("Please enter the name for this Player");
-            PlayerName = Console.ReadLine();
+            string userInput;
+            Console.WriteLine("\nPlease enter the name for this Player");
+            userInput = Console.ReadLine();
+            if(Regex.IsMatch(userInput, @"^\w+$"))
+            {  
+                PlayerName = userInput;
+            }
+            else
+            {
+                Console.WriteLine("Please try again");
+                NamePlayers();
+            }
         }
         public void AddPurchaseItemToInventory(string item, decimal quantity, bool confirmedPurchase, bool confirmedFunds)
         {

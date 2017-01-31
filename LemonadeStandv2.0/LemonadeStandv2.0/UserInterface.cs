@@ -36,7 +36,6 @@ namespace LemonadeStandv2._0
             Console.WriteLine("Rules");
             Console.WriteLine("Store");
             Console.WriteLine("Sell");
-            Console.WriteLine("Track Sales");
             Console.WriteLine("To finish your day, please type 'Finish Day'");
         }
         public void ClearScreen()

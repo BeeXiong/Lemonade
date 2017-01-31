@@ -26,6 +26,9 @@ namespace LemonadeStandv2._0
         }
         public void GameLoop()
         {
+            int userGameDaySelection;
+            int numberOfPlayers;
+            string userSelectedGameLevel;
             gameInformation = new UserInterface();
             gameInformation.DisplayWelcome();
             gameInformation.RequestContinue();
@@ -33,29 +36,34 @@ namespace LemonadeStandv2._0
             gameInformation.DisplayRules();
             gameInformation.RequestContinue();
             gameInformation.ClearScreen();
-            int userGameDaySelection;
             userGameDaySelection = SelectNumberOfGameDays();
             AddGameDays(userGameDaySelection, rndNumber);
             DisplayTotalGameDays();
             gameInformation.RequestContinue();
             gameInformation.ClearScreen();
-            int numberOfPlayers = SelectNumberOfPlayers(); //bug takes input that is not an int
+            numberOfPlayers = SelectNumberOfPlayers();
             CreatePlayers(numberOfPlayers);
             DisplayPlayers();
-            string userSelectedGameLevel;
+            gameInformation.RequestContinue();
+            gameInformation.ClearScreen();
             userSelectedGameLevel = SelectGameLevel();
             SetBeginningPlayerBank(userSelectedGameLevel,rndNumber);
             DisplayPlayerWallet();
-            while (gamePlayers.Count != 0)
+            gameInformation.RequestContinue();
+            gameInformation.ClearScreen();
+            while (gamePlayers.Count != 0 && selectedGameDays.Count > 0)
             {
                 foreach (Human gamePlayer in gamePlayers)
                 {
+                    gameInformation.ClearScreen();
                     Console.WriteLine("Okay, {0}.", gamePlayer.PlayerName);
                     gameInformation.DisplayOptions();
-                    ReceiveOptionRequest(gameInformation, gamePlayer,rndNumber);
+                    ReceiveOptionRequest(gameInformation, gamePlayer,rndNumber, selectedGameDays);
                 }
             }
-            Console.ReadKey();
+            Console.WriteLine("Thanks for playing! Come Back again.");
+            Console.WriteLine("Press Enter to Exit");
+            Console.ReadLine();
         }
         public int SelectNumberOfGameDays()
         {
@@ -78,14 +86,14 @@ namespace LemonadeStandv2._0
         {
             selectedGameDays = new List<Day>();
             int i;
-            for (i = 0; i <= userGameDays; i++)
+            for (i = 0; i < userGameDays; i++)
             {
                 selectedGameDays.Add(new Day(randomNumber));
             }
         }
         public void DisplayTotalGameDays()
         {
-            Console.WriteLine("Okay. We are playing for {0} days",selectedGameDays.Count-1);
+            Console.WriteLine("Okay. We are playing for {0} days",selectedGameDays.Count);
         }
         public int SelectNumberOfPlayers()
         {
@@ -115,7 +123,7 @@ namespace LemonadeStandv2._0
         }
         public void DisplayPlayers()
         {
-            Console.WriteLine("Okay. Here's the list of players for this game");
+            Console.WriteLine("\nOkay. Here's the list of players for this game");
             foreach (Human player in gamePlayers)
             {
                 Console.WriteLine(player.PlayerName);
@@ -123,7 +131,7 @@ namespace LemonadeStandv2._0
         }
         public string SelectGameLevel()
         {
-            Console.WriteLine("Please select game level. 'Easy' - 'Medium' - 'Hard' ");
+            Console.WriteLine("\nPlease select game level. 'Easy' - 'Medium' - 'Hard' ");
             {
                 string userInput = Console.ReadLine().ToLower();
                 switch (userInput)
@@ -134,10 +142,9 @@ namespace LemonadeStandv2._0
                         return userInput;
                     default:
                         Console.WriteLine("Invaild Entry. Please select either 'Easy' - 'Medium' - 'Hard' ");
-                        SelectGameLevel();
                         break;
                 }
-                return null;
+                return SelectGameLevel();
             }
         }
         public void SetBeginningPlayerBank(string userInput, Random randomNumber)
@@ -167,43 +174,61 @@ namespace LemonadeStandv2._0
         }
         public void DisplayPlayerWallet()
         {
+            
             foreach (Human player in gamePlayers)
             {
                 Console.WriteLine("{0} has {1} dollars.",player.PlayerName, player.playerWallet.TotalDollars);
             }
         }
-        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer,Random randomNumber)
+        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer,Random randomNumber, List<Day> listOfGamedays)
         {
             string userinput = Console.ReadLine().ToLower();
             switch (userinput)
             {
                 case "rules":
+                    gameInfo.ClearScreen();
                     gameInfo.DisplayRules();
                     gameInfo.RequestContinue();
                     gameInfo.DisplayOptions();
-                    ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
+                    ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber, listOfGamedays);
                     break;
                 case "store":
-                    ExecuteStoreOptions(gamePlayer);
+                    gameInfo.ClearScreen();
+                    ExecuteStoreOptions(gamePlayer,gameInfo);
                     break;
                 case "sell":
-                    if(gamePlayer.gameInventory.gameCups.Count < 1 || gamePlayer.gameInventory.gameLemons.Count < 1 || gamePlayer.gameInventory.gameIceCubes.Count < 1 || gamePlayer.gameInventory.gameSugarCubes.Count < 1)
+                    gameInfo.ClearScreen();
+                    if (gamePlayer.gameInventory.gameCups.Count < 1 || gamePlayer.gameInventory.gameLemons.Count < 1 || gamePlayer.gameInventory.gameIceCubes.Count < 1 || gamePlayer.gameInventory.gameSugarCubes.Count < 1)
                     {
                         Console.WriteLine("You must go to the store before we can make and sell lemonade.");
+                        gameInfo.RequestContinue();
+                        gameInformation.ClearScreen();
                         gameInfo.DisplayOptions();
-                        ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
+                        ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber, listOfGamedays);
                     }
                     else
                     {
                         Console.WriteLine("Okay {0}, before we can sell we have to make the lemonade.", gamePlayer.PlayerName);//breaks here when the game starts.
-                        ExecuteSellOptions(gamePlayer,randomNumber);
+                        ExecuteSellOptions(gamePlayer,randomNumber,gameInfo);
+                        Console.WriteLine("Okay. The day is done!. Moving on to the next day.");
+                        selectedGameDays.RemoveAt(0);
+                        gameInfo.RequestContinue();
+                        gameInfo.ClearScreen();
                     }
                     break;
                 case "finish day":
-                    break; 
+                    Console.WriteLine("Okay. The day is done!. Moving on to the next day.");
+                    selectedGameDays.RemoveAt(0);
+                    gameInfo.RequestContinue();
+                    gameInfo.ClearScreen();
+                    break;
+                default:
+                    Console.WriteLine("Invalid Entry. Please select either 'rules' - 'store' - 'sell' or 'finish day'");
+                    gameInfo.RequestContinue();
+                    break;
             }
         }
-        private void ExecuteStoreOptions(Human gamePlayer)
+        private void ExecuteStoreOptions(Human gamePlayer,UserInterface gameInfo)
         {
             string userSelectedItem;
             decimal purchaseQuantity;
@@ -213,6 +238,7 @@ namespace LemonadeStandv2._0
             bool fundConfirmation;
             bool shoppingResponse;
 
+            DisplayInventory(gamePlayer);
             userSelectedItem = SelectItemToPurchase(gamePlayer);
             purchaseQuantity = SelectPurchaseAmount(userSelectedItem);           
             itemPrice = gameStore.DetermineItemPrice(userSelectedItem);       
@@ -221,14 +247,17 @@ namespace LemonadeStandv2._0
             fundConfirmation = VerifyFundsForPurchase(transactionAmount, gamePlayer);
             RemoveFundsAfterPurchase(customerConfirmation, fundConfirmation, gamePlayer, transactionAmount);
             gamePlayer.AddPurchaseItemToInventory(userSelectedItem, purchaseQuantity, customerConfirmation, fundConfirmation);
+            gameInfo.RequestContinue();
+            gameInfo.ClearScreen();
             DisplayInventory(gamePlayer);
             DisplayPlayerFunds();            
             shoppingResponse = PromptToContinueShopping();
-            ContinueShopping(shoppingResponse,gamePlayer);
+            gameInformation.ClearScreen();
+            ContinueShopping(shoppingResponse,gamePlayer,gameInfo);
         }
         private string SelectItemToPurchase(Human gamePlayer)
         {
-            Console.WriteLine("Okay {0}. What would you like to purchase?",gamePlayer.PlayerName);
+            Console.WriteLine("\nOkay {0}. What would you like to purchase?",gamePlayer.PlayerName);
             Console.WriteLine("Lemons");
             Console.WriteLine("Ice Cubes");
             Console.WriteLine("Sugar Cubes");
@@ -240,33 +269,40 @@ namespace LemonadeStandv2._0
                 case "ice cubes":
                 case "sugar cubes":
                 case "cups":
-                    Console.WriteLine("You have choosen {0}", userItemSelection);
-                    break;
+                    Console.WriteLine("\nYou have choosen {0}", userItemSelection);
+                    return userItemSelection;
                 default:
                     Console.WriteLine("Invaild Entry. Please select either 'Lemons' - 'Ice Cubes' - 'Sugar Cubes' - 'Cups' ");
-                    SelectItemToPurchase(gamePlayer);
                     break;
             }
-            return userItemSelection;
+            return SelectItemToPurchase(gamePlayer);
         }
         private decimal SelectPurchaseAmount(string userItemSelection)
         {
-            Console.WriteLine("How many {0} would you like", userItemSelection);
+            Console.WriteLine("\nHow many {0} would you like", userItemSelection);
             string userInput = Console.ReadLine();
-            decimal purchaseQuantity;
-            decimal.TryParse(userInput, out purchaseQuantity);
-            return purchaseQuantity;
+            if(Regex.IsMatch(userInput, @"^\d+$"))
+            {
+                decimal purchaseQuantity;
+                decimal.TryParse(userInput, out purchaseQuantity);
+                return purchaseQuantity;
+            }
+            else
+            {
+                Console.WriteLine("Invalid Entry. Please try again");
+            }
+            return SelectPurchaseAmount(userItemSelection);
         }
         private decimal CalculatePrice(decimal purchaseQuantity, decimal itemPrice)
         {
             decimal transactionPrice;
             transactionPrice = purchaseQuantity * itemPrice;
-            Console.WriteLine("The total for this purchase will be {0}",transactionPrice);
+            Console.WriteLine("\nThe total for this purchase will be {0}",transactionPrice);
             return transactionPrice;
         }
         private bool ConfirmPurchase()
         {
-            Console.WriteLine("Would you like to purchase this item?");
+            Console.WriteLine("\nWould you like to purchase this item?");
             string userInput;
             userInput = Console.ReadLine().ToLower();
             if(userInput == "yes")
@@ -280,8 +316,7 @@ namespace LemonadeStandv2._0
             else
             {
                 Console.WriteLine("Invalid Entry. Please select 'Yes' or 'No'");
-                ConfirmPurchase();
-                return false;             
+                return ConfirmPurchase(); ;             
             }
         }
         private bool VerifyFundsForPurchase(decimal transactionAmount, Human gamePlayer)
@@ -323,29 +358,27 @@ namespace LemonadeStandv2._0
                 return true;
             }
             else if (userInput != "yes" && userInput != "no")
-            {
-                
-                Console.WriteLine("Invalid Selection. Please select either 'Yes' or 'No'");
-                PromptToContinueShopping();
-                return false;//bug here due to return false after recursion occurs (event if it returns something from the recursion)
+            {   
+                Console.WriteLine("Invalid Selection. Please select either 'Yes' or 'No'");  
+                return PromptToContinueShopping();
             }
             else
             {
                 return false;
             }
         }
-        private void ContinueShopping(bool shoppingResponse,Human gamePlayer)
+        private void ContinueShopping(bool shoppingResponse,Human gamePlayer, UserInterface gamePrompt)
         {
             if (shoppingResponse == true)
             {
-                ExecuteStoreOptions(gamePlayer);
+                ExecuteStoreOptions(gamePlayer,gamePrompt);
             }
             else
             {
                 Console.WriteLine("Alright {0}, Thanks for shopping!",gamePlayer.PlayerName);
             }
         }
-        private void ExecuteSellOptions(Human gamePlayer,Random randomNumber)
+        private void ExecuteSellOptions(Human gamePlayer,Random randomNumber,UserInterface gameInfo)
         {
             int amountToMake;
             int lemonAmount;
@@ -372,15 +405,21 @@ namespace LemonadeStandv2._0
             DisplayInventory(gamePlayer);
             currentGameDay = SelectCurrentDay();
             DisplayDailyWeather(currentGameDay);
+            gameInfo.RequestContinue();
+            gameInfo.ClearScreen();
             SellLemonadeCups(currentGameDay,lemonadeTaste,randomNumber,gamePlayer);
             RemoveLemonadeCupsFromInventory(gamePlayer, currentGameDay);
             dailyNumberOfSales = DetermineDailyNumberOfSales(currentGameDay);
             dailyRevenue = CalculateDailyRevenue(dailyNumberOfSales, lemonadeSellingPrice);
             DisplayDailySales(dailyRevenue, dailyNumberOfSales);
+            gameInfo.RequestContinue();
+            gameInfo.ClearScreen();
             dailyTransactions = GenerateListOfTransactions(currentGameDay);
             totalGameTransactions = calculateTotalTransactions(dailyTransactions);
             totalGameRevenue = CalculateTotalGameRevenue(dailyTransactions, salePrices);
             DisplayAllSales(totalGameTransactions, totalGameRevenue);
+            gameInfo.RequestContinue();
+            gameInfo.ClearScreen();
         }
         private void DisplayInventory(Human gamePlayer)
         {
@@ -465,7 +504,8 @@ namespace LemonadeStandv2._0
                 int.TryParse(Console.ReadLine(), out amountRequested);
                 if (amountRequested <= gamePlayer.gameInventory.gameSugarCubes.Count && amountRequested <= 10 && amountRequested >= 1)
                 {
-                return amountRequested;
+
+                    return amountRequested;
                 }
                 else
                 {
@@ -499,7 +539,6 @@ namespace LemonadeStandv2._0
                     lemonadeTaste = "sweet";
                     return lemonadeTaste;
                 }
-
             }
             else
             {
@@ -521,12 +560,12 @@ namespace LemonadeStandv2._0
                 decimal.TryParse(Console.ReadLine(), out sellPrice);
                 return sellPrice;
             }
-            catch (OverflowException)
+            catch (Exception)
             {
                 Console.WriteLine("Not a valid selection. Please try again.");
                 DetermineSellingPrice();
-            }
-            return default(decimal);
+                throw;
+            } 
         }
         private void StoreDailySellingPrice(decimal dailySalePrice)
         {
@@ -542,6 +581,7 @@ namespace LemonadeStandv2._0
             Console.WriteLine("Okay. Let's sell some Lemonade");
             Console.WriteLine("Here's what the weather looks like for today.");
             Console.WriteLine("Temperature: {0}", currentDay.WeatherCondition.Temperature);
+            Console.WriteLine("Weather Condition: {0}", currentDay.WeatherCondition.Condition);
         }
         private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber,Human gamePlayer)
         {
@@ -634,9 +674,9 @@ namespace LemonadeStandv2._0
         {
             return numberOfSales * cupSalePrice;
         }
-        private void DisplayDailySales(decimal dailyAmountOfSales, decimal dailytransactions)
+        private void DisplayDailySales(decimal dailyAmountOfSales, decimal transactionsForDay)
         {
-            Console.WriteLine("You made {0} dollars today off of {1} transactions.", dailyAmountOfSales,dailyTransactions);
+            Console.WriteLine("You made {0} dollars today off of {1} transactions.", dailyAmountOfSales, transactionsForDay);
         }
         private List<decimal> GenerateListOfTransactions(Day currentDay)
         {        
@@ -666,7 +706,7 @@ namespace LemonadeStandv2._0
         }
         private void DisplayAllSales(decimal totalGameTransactions, decimal totalGameRevenue)
         {
-            Console.WriteLine("You have");
+            Console.WriteLine("You have made {0} dollars total off of {1} total transactions",totalGameRevenue,totalGameTransactions);
         }
     }
 }
