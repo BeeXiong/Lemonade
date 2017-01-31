@@ -388,6 +388,7 @@ namespace LemonadeStandv2._0
             int lemonAmount;
             int iceCubeAmount;
             int sugarCubeAmount;
+            int supplyDemandModifier;
             decimal dailyNumberOfSales;
             decimal lemonadeSellingPrice;
             decimal dailyRevenue;
@@ -404,6 +405,7 @@ namespace LemonadeStandv2._0
             DisplayTaste(lemonadeTaste);
             lemonadeSellingPrice = DetermineSellingPrice(gameInfo);
             StoreDailySellingPrice(lemonadeSellingPrice);
+            supplyDemandModifier = IdentifyPriceModifier(lemonadeSellingPrice);
             gamePlayer.CreateLemonadeCups(lemonadeTaste, amountToMake, lemonadeSellingPrice, gamePlayer);
             gamePlayer.RemoveInventory(lemonAmount, iceCubeAmount, sugarCubeAmount, amountToMake);
             DisplayInventory(gamePlayer);
@@ -411,7 +413,7 @@ namespace LemonadeStandv2._0
             DisplayDailyWeather(currentGameDay);
             gameInfo.RequestContinue();
             gameInfo.ClearScreen();
-            SellLemonadeCups(currentGameDay,lemonadeTaste,randomNumber,gamePlayer);
+            SellLemonadeCups(currentGameDay,lemonadeTaste,randomNumber,gamePlayer,supplyDemandModifier);
             RemoveLemonadeCupsFromInventory(gamePlayer, currentGameDay);
             dailyNumberOfSales = DetermineDailyNumberOfSales(currentGameDay);
             dailyRevenue = CalculateDailyRevenue(dailyNumberOfSales, lemonadeSellingPrice);
@@ -424,6 +426,7 @@ namespace LemonadeStandv2._0
             totalGameRevenue = CalculateTotalGameRevenue(dailyTransactions, salePrices);
             DisplayAllSales(totalGameTransactions, totalGameRevenue);
             gameInfo.RequestContinue();
+
             gameInfo.ClearScreen();
         }
         private void DisplayInventory(Human gamePlayer)
@@ -640,7 +643,19 @@ namespace LemonadeStandv2._0
             Console.WriteLine("Temperature: {0}", currentDay.WeatherCondition.Temperature);
             Console.WriteLine("Weather Condition: {0}", currentDay.WeatherCondition.Condition);
         }
-        private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber,Human gamePlayer)
+        private int IdentifyPriceModifier(decimal dailySalePrice)
+        {
+            if (dailySalePrice >= 1.5m)
+            {
+                return 3;
+            }
+            else if (dailySalePrice >= .8m)
+            {
+                return 2;
+            }
+            return 1;
+        }
+        private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber,Human gamePlayer,int priceModifier)
         {
             int totalLemonadeCups;
             totalLemonadeCups = gamePlayer.gameInventory.gameLemonadeCups.Count();
@@ -659,14 +674,17 @@ namespace LemonadeStandv2._0
                 {
                     if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
                     {
-                        currentDay.purchasingCustomers.Add(potientialCustomer);
-                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                        Console.WriteLine("The customer purchased some lemonade!");
-                        
+                        decimal chanceTobuy = (1 * priceModifier);
+                        if (chanceTobuy == 1)
+                        {
+                            currentDay.purchasingCustomers.Add(potientialCustomer);
+                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                            Console.WriteLine("The customer purchased some lemonade!");
+                        }
                     }
                     else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
                     {
-                        decimal chanceTobuy = randomNumber.Next(1, 2);
+                        decimal chanceTobuy = randomNumber.Next(1, (2*priceModifier));
                         if (chanceTobuy == 1)
                         {
                             currentDay.purchasingCustomers.Add(potientialCustomer);
@@ -676,7 +694,7 @@ namespace LemonadeStandv2._0
                     }
                     else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && currentDay.WeatherCondition.Condition == "raining")
                     {
-                        decimal chanceTobuy = randomNumber.Next(1, 3);
+                        decimal chanceTobuy = randomNumber.Next(1, (3*priceModifier));
                         if (chanceTobuy == 1)
                         {
                             currentDay.purchasingCustomers.Add(potientialCustomer);
@@ -686,7 +704,7 @@ namespace LemonadeStandv2._0
                     }
                     if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
                     {
-                        decimal chanceTobuy = randomNumber.Next(1, 5);
+                        decimal chanceTobuy = randomNumber.Next(1, (5*priceModifier));
                         if (chanceTobuy == 1)
                         {
                             currentDay.purchasingCustomers.Add(potientialCustomer);
@@ -696,7 +714,7 @@ namespace LemonadeStandv2._0
                     }
                     else if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
                     {
-                        decimal chanceTobuy = randomNumber.Next(1, 10);
+                        decimal chanceTobuy = randomNumber.Next(1, (10*priceModifier));
                         if (chanceTobuy == 1)
                         {
                             currentDay.purchasingCustomers.Add(potientialCustomer);
@@ -737,7 +755,7 @@ namespace LemonadeStandv2._0
         }
         private void DisplayDailySales(decimal dailyAmountOfSales, decimal transactionsForDay)
         {
-            Console.WriteLine("You made {0} dollars today off of {1} transactions.", dailyAmountOfSales, transactionsForDay);
+            Console.WriteLine("Today, you made {0} dollars today off of {1} transactions.", dailyAmountOfSales, transactionsForDay);
         }
         private List<decimal> GenerateListOfTransactions(Day currentDay)
         {        
