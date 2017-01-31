@@ -66,15 +66,15 @@ namespace LemonadeStandv2._0
             {
                 gameInventory.gameLemons.RemoveAt(0);
             }
-            for (i = 0; i <= iceCubeAmount; i++)
+            for (i = 0; i < iceCubeAmount; i++)
             {
                 gameInventory.gameIceCubes.RemoveAt(0);
             }
-            for(i = 0; i <= sugarCubeAmount; i++)
+            for(i = 0; i < sugarCubeAmount; i++)
             {
                 gameInventory.gameSugarCubes.RemoveAt(0);
             }
-            for (i = 0; i <= cupAmount; i++)
+            for (i = 0; i < cupAmount; i++)
             {
                 gameInventory.gameCups.RemoveAt(0);
             }

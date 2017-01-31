@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace LemonadeStandv2._0
 {
@@ -11,12 +13,16 @@ namespace LemonadeStandv2._0
         UserInterface gameInformation;
         List<Day> selectedGameDays;
         List<Player> gamePlayers;
+        List<decimal> salePrices;
+        List<decimal> dailyTransactions;
         Store gameStore;
         Random rndNumber;
+
         public Game()
         {
             gameStore = new Store();
             rndNumber = new Random();
+            salePrices = new List<decimal>();
         }
         public void GameLoop()
         {
@@ -29,7 +35,7 @@ namespace LemonadeStandv2._0
             gameInformation.ClearScreen();
             int userGameDaySelection;
             userGameDaySelection = SelectNumberOfGameDays();
-            AddGameDays(userGameDaySelection, rndNumber); //bug weather all the same
+            AddGameDays(userGameDaySelection, rndNumber);
             DisplayTotalGameDays();
             gameInformation.RequestContinue();
             gameInformation.ClearScreen();
@@ -46,26 +52,27 @@ namespace LemonadeStandv2._0
                 {
                     Console.WriteLine("Okay, {0}.", gamePlayer.PlayerName);
                     gameInformation.DisplayOptions();
-                    ReceiveOptionRequest(gameInformation, gamePlayer);
+                    ReceiveOptionRequest(gameInformation, gamePlayer,rndNumber);
                 }
             }
             Console.ReadKey();
         }
         public int SelectNumberOfGameDays()
         {
-            Console.WriteLine("Please select the number of days you would like to play");
-            int userinput;
-            try
+            string userInput;
+            int cvtUserInput;
+            Console.WriteLine("Please select the number of days to play.");
+            userInput = Console.ReadLine();
+            if (Regex.IsMatch(userInput, @"^\d+$"))
             {
-                int.TryParse(Console.ReadLine(), out userinput);
-                return userinput;
+                int.TryParse(userInput, out cvtUserInput);
+                return cvtUserInput;
             }
-            catch (OverflowException)
+            else
             {
-                Console.WriteLine("Not a valid selection. Please try again.");
-                SelectNumberOfGameDays();
+                Console.WriteLine("Not a valid selection. Please try again.\n");
             }
-            return default(int);
+            return SelectNumberOfGameDays();
         }
         public void AddGameDays(int userGameDays, Random randomNumber)
         {
@@ -80,26 +87,22 @@ namespace LemonadeStandv2._0
         {
             Console.WriteLine("Okay. We are playing for {0} days",selectedGameDays.Count-1);
         }
-        public void DisplayGameOptions()
-        {
-            Console.WriteLine("Let's get started");
-            Console.WriteLine("What would you like to do? 'Shop' - 'Make Lemonade' - ");
-        }
         public int SelectNumberOfPlayers()
         {
+            string userInput;
+            int cvtUserInput;
             Console.WriteLine("Please select the number of players");
-            int userinput;
-            try
+            userInput = Console.ReadLine();
+            if (Regex.IsMatch(userInput, @"^\d+$"))
             {
-                int.TryParse(Console.ReadLine(), out userinput);
-                return userinput;
+                int.TryParse(userInput, out cvtUserInput);
+                return cvtUserInput;
             }
-            catch (OverflowException)
+            else
             {
-                Console.WriteLine("Not a valid selection. Please try again.");
-                SelectNumberOfGameDays();
+                Console.WriteLine("Not a valid selection. Please try again.\n");
             }
-            return default(int);
+            return SelectNumberOfGameDays(); ;
         }
         public void CreatePlayers(int numberOfPlayers)
         {
@@ -169,7 +172,7 @@ namespace LemonadeStandv2._0
                 Console.WriteLine("{0} has {1} dollars.",player.PlayerName, player.playerWallet.TotalDollars);
             }
         }
-        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer)
+        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer,Random randomNumber)
         {
             string userinput = Console.ReadLine().ToLower();
             switch (userinput)
@@ -178,19 +181,25 @@ namespace LemonadeStandv2._0
                     gameInfo.DisplayRules();
                     gameInfo.RequestContinue();
                     gameInfo.DisplayOptions();
-                    ReceiveOptionRequest(gameInfo, gamePlayer);
+                    ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
                     break;
                 case "store":
                     ExecuteStoreOptions(gamePlayer);
                     break;
                 case "sell":
-                    Console.WriteLine("Okay {0}, before we can sell we have to make the lemonade.",gamePlayer.PlayerName);//breaks here when the game starts.
-                    ExecuteSellOptions(gamePlayer);
-                    break;
-                case "sales tracking":
+                    if(gamePlayer.gameInventory.gameCups.Count < 1 || gamePlayer.gameInventory.gameLemons.Count < 1 || gamePlayer.gameInventory.gameIceCubes.Count < 1 || gamePlayer.gameInventory.gameSugarCubes.Count < 1)
+                    {
+                        Console.WriteLine("You must go to the store before we can make and sell lemonade.");
+                        gameInfo.DisplayOptions();
+                        ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Okay {0}, before we can sell we have to make the lemonade.", gamePlayer.PlayerName);//breaks here when the game starts.
+                        ExecuteSellOptions(gamePlayer,randomNumber);
+                    }
                     break;
                 case "finish day":
-                    //include destory lemonade cups here
                     break; 
             }
         }
@@ -242,7 +251,7 @@ namespace LemonadeStandv2._0
         }
         private decimal SelectPurchaseAmount(string userItemSelection)
         {
-            Console.WriteLine("How many {0}s would you like", userItemSelection);
+            Console.WriteLine("How many {0} would you like", userItemSelection);
             string userInput = Console.ReadLine();
             decimal purchaseQuantity;
             decimal.TryParse(userInput, out purchaseQuantity);
@@ -315,9 +324,10 @@ namespace LemonadeStandv2._0
             }
             else if (userInput != "yes" && userInput != "no")
             {
+                
                 Console.WriteLine("Invalid Selection. Please select either 'Yes' or 'No'");
                 PromptToContinueShopping();
-                return false;
+                return false;//bug here due to return false after recursion occurs (event if it returns something from the recursion)
             }
             else
             {
@@ -335,14 +345,19 @@ namespace LemonadeStandv2._0
                 Console.WriteLine("Alright {0}, Thanks for shopping!",gamePlayer.PlayerName);
             }
         }
-        private void ExecuteSellOptions(Human gamePlayer)
+        private void ExecuteSellOptions(Human gamePlayer,Random randomNumber)
         {
             int amountToMake;
             int lemonAmount;
             int iceCubeAmount;
             int sugarCubeAmount;
+            decimal dailyNumberOfSales;
             decimal lemonadeSellingPrice;
+            decimal dailyRevenue;
+            decimal totalGameRevenue;
+            decimal totalGameTransactions;
             string lemonadeTaste;
+            Day currentGameDay;
             DisplayInventory(gamePlayer);
             amountToMake = SelectCupAmount(gamePlayer);
             lemonAmount = SelectLemonAmount(gamePlayer);
@@ -351,9 +366,21 @@ namespace LemonadeStandv2._0
             lemonadeTaste = DetermineTaste(lemonAmount, iceCubeAmount, sugarCubeAmount);
             DisplayTaste(lemonadeTaste);
             lemonadeSellingPrice = DetermineSellingPrice();
+            StoreDailySellingPrice(lemonadeSellingPrice);
             gamePlayer.CreateLemonadeCups(lemonadeTaste, amountToMake, lemonadeSellingPrice, gamePlayer);
             gamePlayer.RemoveInventory(lemonAmount, iceCubeAmount, sugarCubeAmount, amountToMake);
             DisplayInventory(gamePlayer);
+            currentGameDay = SelectCurrentDay();
+            DisplayDailyWeather(currentGameDay);
+            SellLemonadeCups(currentGameDay,lemonadeTaste,randomNumber,gamePlayer);
+            RemoveLemonadeCupsFromInventory(gamePlayer, currentGameDay);
+            dailyNumberOfSales = DetermineDailyNumberOfSales(currentGameDay);
+            dailyRevenue = CalculateDailyRevenue(dailyNumberOfSales, lemonadeSellingPrice);
+            DisplayDailySales(dailyRevenue, dailyNumberOfSales);
+            dailyTransactions = GenerateListOfTransactions(currentGameDay);
+            totalGameTransactions = calculateTotalTransactions(dailyTransactions);
+            totalGameRevenue = CalculateTotalGameRevenue(dailyTransactions, salePrices);
+            DisplayAllSales(totalGameTransactions, totalGameRevenue);
         }
         private void DisplayInventory(Human gamePlayer)
         {
@@ -427,7 +454,7 @@ namespace LemonadeStandv2._0
             }
             return default(int);
         }
-        private int SelectSugarCubeAmount( Human gamePlayer)
+        private int SelectSugarCubeAmount(Human gamePlayer)
         {
             int amountRequested;
             bool sugarCubeConfirmation;
@@ -472,11 +499,12 @@ namespace LemonadeStandv2._0
                     lemonadeTaste = "sweet";
                     return lemonadeTaste;
                 }
-                else if (taste >= 0)
-                {
-                    lemonadeTaste = "nuetral";
-                    return lemonadeTaste;
-                }
+
+            }
+            else
+            {
+                lemonadeTaste = "nuetral";
+                return lemonadeTaste;
             }
             return null;      
         }
@@ -484,10 +512,9 @@ namespace LemonadeStandv2._0
         {
             Console.WriteLine("This batch of lemonade has a {0} taste.",lemonadeTaste);
         }
-        private decimal DetermineSellingPrice()
+        private decimal DetermineSellingPrice()//make this into a while loop for verification
         {
             decimal sellPrice;
-
             Console.WriteLine("How much would you like to charge? (Please include your dollar and cents - examples: 1.50, .99, .01)");
             try
             {
@@ -501,6 +528,145 @@ namespace LemonadeStandv2._0
             }
             return default(decimal);
         }
+        private void StoreDailySellingPrice(decimal dailySalePrice)
+        {
+            salePrices.Add(dailySalePrice);
+        }
+        private Day SelectCurrentDay()
+        {
+            Day currentGameDay = selectedGameDays[0];
+            return currentGameDay; 
+        }
+        private void DisplayDailyWeather(Day currentDay)
+        { 
+            Console.WriteLine("Okay. Let's sell some Lemonade");
+            Console.WriteLine("Here's what the weather looks like for today.");
+            Console.WriteLine("Temperature: {0}", currentDay.WeatherCondition.Temperature);
+        }
+        private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber,Human gamePlayer)
+        {
+            int totalLemonadeCups;
+            totalLemonadeCups = gamePlayer.gameInventory.gameLemonadeCups.Count();
+            foreach (Customer potientialCustomer in currentDay.lemonadeCustomers)
+            {
+                Console.WriteLine("A new customer is approaching");
+                Console.Write("*");
+                Thread.Sleep(100);
+                Console.Write("*");
+                Thread.Sleep(100);
+                Console.Write("*");
+                Thread.Sleep(100);
+                Console.Write("*");
+                Thread.Sleep(100);
+                if (totalLemonadeCups > 0)
+                {
+                    if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
+                    {
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
+                        
+                    }
+                    else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
+                    {
+                        decimal chanceTobuy = randomNumber.Next(1, 2);
+                        if (chanceTobuy == 1)
+                        {
+                            currentDay.purchasingCustomers.Add(potientialCustomer);
+                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                            Console.WriteLine("The customer purchased some lemonade!");
+                        }
+                    }
+                    else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && currentDay.WeatherCondition.Condition == "raining")
+                    {
+                        decimal chanceTobuy = randomNumber.Next(1, 3);
+                        if (chanceTobuy == 1)
+                        {
+                            currentDay.purchasingCustomers.Add(potientialCustomer);
+                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                            Console.WriteLine("The customer purchased some lemonade!");
+                        }
+                    }
+                    if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
+                    {
+                        decimal chanceTobuy = randomNumber.Next(1, 5);
+                        if (chanceTobuy == 1)
+                        {
+                            currentDay.purchasingCustomers.Add(potientialCustomer);
+                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                            Console.WriteLine("The customer purchased some lemonade!");
+                        }
+                    }
+                    else if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
+                    {
+                        decimal chanceTobuy = randomNumber.Next(1, 10);
+                        if (chanceTobuy == 1)
+                        {
+                            currentDay.purchasingCustomers.Add(potientialCustomer);
+                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                            Console.WriteLine("The customer purchased some lemonade!");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You are out of Lemonade for the day!");
+                }
+            }
+        }
+        private void RemoveLemonadeCupsFromInventory(Human gamePlayer, Day currentDay)
+        {
+            int totalLemonadeCups;
+            totalLemonadeCups = gamePlayer.gameInventory.gameLemonadeCups.Count();
+            int i;
+            for (i = 0; i < totalLemonadeCups; i++)
+            { 
+               gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);  
+            }
+        }
+        private decimal DetermineDailyNumberOfSales(Day currentDay)
+        {
+            decimal totalNumberOfSales; 
+            totalNumberOfSales = currentDay.purchasingCustomers.Count;
+            return totalNumberOfSales;
+        }
+        private decimal CalculateDailyRevenue(decimal numberOfSales, decimal cupSalePrice)
+        {
+            return numberOfSales * cupSalePrice;
+        }
+        private void DisplayDailySales(decimal dailyAmountOfSales, decimal dailytransactions)
+        {
+            Console.WriteLine("You made {0} dollars today off of {1} transactions.", dailyAmountOfSales,dailyTransactions);
+        }
+        private List<decimal> GenerateListOfTransactions(Day currentDay)
+        {        
+            dailyTransactions = new List<decimal>();
+            foreach (Day gameDay in selectedGameDays)
+            {
+                dailyTransactions.Add(gameDay.purchasingCustomers.Count());
+            }
+            return dailyTransactions;
+        }
+        private decimal CalculateTotalGameRevenue(List<Decimal> dailyTransactionAmount, List<decimal> dailySalesPrice)
+        {
+            int i;
+            List<decimal> totalRevenue;
+            totalRevenue = new List<decimal>();
+            i = 0;
+            foreach(decimal price in dailySalesPrice)
+            {
+                totalRevenue.Add(price * dailyTransactionAmount[i]);
+            }
+            return totalRevenue.Sum();
+        }
+        private decimal calculateTotalTransactions(List<decimal> gameTransactions)
+        {
+            return gameTransactions.Sum();
 
+        }
+        private void DisplayAllSales(decimal totalGameTransactions, decimal totalGameRevenue)
+        {
+            Console.WriteLine("You have");
+        }
     }
 }

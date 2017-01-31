@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 namespace LemonadeStandv2._0
 {
     class Day
-    {
-        Weather weatherCondition;
+    {     
         Random rnd;
-        List<Customer> lemonadeCustomers;
+        public List<Customer> lemonadeCustomers;
+        public List<Customer> purchasingCustomers;
+        public Weather WeatherCondition { get; set; }
         public Day(Random rndNumber)
         {
             rnd = rndNumber;
             SetWeatherConditions();
             SetTemp();
             lemonadeCustomers = new List<Customer>();
+            purchasingCustomers = new List<Customer>();
             int totalCustomers;
             totalCustomers = GenerateTotalCustomers(rnd);
             AddCustomers(totalCustomers);
@@ -24,17 +26,17 @@ namespace LemonadeStandv2._0
         public int GenerateTotalCustomers(Random number)
         {
             int totalCustomers;
-            if (weatherCondition.Temperature > 80 && weatherCondition.Condition == "sunny" || weatherCondition.Condition == "cloudy")//ideal situation
+            if (WeatherCondition.Temperature > 80 && WeatherCondition.Condition == "sunny" || WeatherCondition.Condition == "cloudy")//ideal situation
             {
                 totalCustomers = number.Next(50, 100);
                 return totalCustomers;
             }
-            else if (weatherCondition.Temperature < 55 || weatherCondition.Condition == "raining")// terrible day
+            else if (WeatherCondition.Temperature < 55 || WeatherCondition.Condition == "raining")// terrible day
             {
                 totalCustomers = rnd.Next(1, 40);
                 return totalCustomers;
             }
-            else if (weatherCondition.Temperature < 79 && (weatherCondition.Condition == "sunny" || weatherCondition.Condition == "cloudy"))// okay day
+            else if (WeatherCondition.Temperature < 79 && (WeatherCondition.Condition == "sunny" || WeatherCondition.Condition == "cloudy"))// okay day
             {
                 totalCustomers = rnd.Next(30, 70);
                 return totalCustomers;
@@ -55,22 +57,22 @@ namespace LemonadeStandv2._0
         public void SetWeatherConditions()
         {
             int Random = rnd.Next(50, 85);
-            weatherCondition = new Weather();
+            WeatherCondition = new Weather();
             if (Random % 5 == 0)
             {
-                weatherCondition.Condition = "raining";
+                WeatherCondition.Condition = "raining";
             }
             else if (Random * 3 % 2 == 0)
             {
-                weatherCondition.Condition = "cloudy";
+                WeatherCondition.Condition = "cloudy";
             }
             else if (Random * 2 % 2 != 0)
             {
-                weatherCondition.Condition = "sunny";
+                WeatherCondition.Condition = "sunny";
             }
             else
             {
-                weatherCondition.Condition = "sunny";
+                WeatherCondition.Condition = "sunny";
             }         
         }
         public void SetTemp()
@@ -78,11 +80,11 @@ namespace LemonadeStandv2._0
             decimal Random = rnd.Next(60, 100);
             if (Random % 2 == 0)
             {
-                weatherCondition.Temperature = Random;
+                WeatherCondition.Temperature = Random;
             }
             else
             {
-                weatherCondition.Temperature = (Random * 1.1m);
+                WeatherCondition.Temperature = (Random * 1.1m);
             }
         }
 

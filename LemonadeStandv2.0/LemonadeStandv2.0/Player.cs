@@ -10,6 +10,7 @@ namespace LemonadeStandv2._0
     {
         public Wallet playerWallet;
         public Inventory gameInventory;
+        
         public Player()
         {
             playerWallet = new Wallet();

@@ -45,7 +45,7 @@ namespace LemonadeStandv2._0
         }
         public void RequestContinue()
         {
-            Console.WriteLine("\r\nPress any key to continue");
+            Console.WriteLine("\r\nPress any ENTER to continue");
             Console.ReadLine();
         }
     }
