@@ -95,22 +95,26 @@ namespace LemonadeStandv2._0
         {
             Console.WriteLine("Okay. We are playing for {0} days",selectedGameDays.Count);
         }
+        //public int SelectNumberOfPlayers()
+        //{
+        //    string userInput;
+        //    int cvtUserInput;
+        //    Console.WriteLine("Please select the number of players");
+        //    userInput = Console.ReadLine();
+        //    if (Regex.IsMatch(userInput, @"^\d+$"))
+        //    {
+        //        int.TryParse(userInput, out cvtUserInput);
+        //        return cvtUserInput;
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Not a valid selection. Please try again.\n");
+        //    }
+        //    return SelectNumberOfPlayers();
+        //}
         public int SelectNumberOfPlayers()
         {
-            string userInput;
-            int cvtUserInput;
-            Console.WriteLine("Please select the number of players");
-            userInput = Console.ReadLine();
-            if (Regex.IsMatch(userInput, @"^\d+$"))
-            {
-                int.TryParse(userInput, out cvtUserInput);
-                return cvtUserInput;
-            }
-            else
-            {
-                Console.WriteLine("Not a valid selection. Please try again.\n");
-            }
-            return SelectNumberOfGameDays(); ;
+            return 1;
         }
         public void CreatePlayers(int numberOfPlayers)
         {
@@ -392,13 +396,13 @@ namespace LemonadeStandv2._0
             string lemonadeTaste;
             Day currentGameDay;
             DisplayInventory(gamePlayer);
-            amountToMake = SelectCupAmount(gamePlayer);
-            lemonAmount = SelectLemonAmount(gamePlayer);
-            iceCubeAmount = SelectIceCubeAmount(gamePlayer);
-            sugarCubeAmount =  SelectSugarCubeAmount(gamePlayer);
+            amountToMake = SelectCupAmount(gamePlayer,gameInfo);
+            lemonAmount = SelectLemonAmount(gamePlayer,gameInfo);
+            iceCubeAmount = SelectIceCubeAmount(gamePlayer,gameInfo);
+            sugarCubeAmount =  SelectSugarCubeAmount(gamePlayer,gameInfo);
             lemonadeTaste = DetermineTaste(lemonAmount, iceCubeAmount, sugarCubeAmount);
             DisplayTaste(lemonadeTaste);
-            lemonadeSellingPrice = DetermineSellingPrice();
+            lemonadeSellingPrice = DetermineSellingPrice(gameInfo);
             StoreDailySellingPrice(lemonadeSellingPrice);
             gamePlayer.CreateLemonadeCups(lemonadeTaste, amountToMake, lemonadeSellingPrice, gamePlayer);
             gamePlayer.RemoveInventory(lemonAmount, iceCubeAmount, sugarCubeAmount, amountToMake);
@@ -411,6 +415,7 @@ namespace LemonadeStandv2._0
             RemoveLemonadeCupsFromInventory(gamePlayer, currentGameDay);
             dailyNumberOfSales = DetermineDailyNumberOfSales(currentGameDay);
             dailyRevenue = CalculateDailyRevenue(dailyNumberOfSales, lemonadeSellingPrice);
+            AddRevenueToBank(gamePlayer, dailyRevenue);
             DisplayDailySales(dailyRevenue, dailyNumberOfSales);
             gameInfo.RequestContinue();
             gameInfo.ClearScreen();
@@ -430,86 +435,134 @@ namespace LemonadeStandv2._0
             Console.WriteLine("{0} - Cups", gamePlayer.gameInventory.gameCups.Count);
             Console.WriteLine("{0} - Lemonade Cups", gamePlayer.gameInventory.gameLemonadeCups.Count);
         }
-        private int SelectCupAmount(Human gamePlayer)    
+        private int SelectCupAmount(Human gamePlayer,UserInterface gameInfo)    
         {
             int amountRequested;
             bool cupConfirmation;
+            string userInput;
             cupConfirmation = false;
             while (cupConfirmation == false)
             {
                 Console.WriteLine("How many cups would you like to make?");
-                int.TryParse(Console.ReadLine(), out amountRequested);
-                if (amountRequested <= gamePlayer.gameInventory.gameCups.Count)
+                userInput = Console.ReadLine();
+                try
                 {
-                    cupConfirmation = true;
-                    return amountRequested;
+                    amountRequested = int.Parse(userInput);
+                    if (amountRequested <= gamePlayer.gameInventory.gameCups.Count)
+                    {
+                        //cupConfirmation = true;
+                        return amountRequested;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You do not have enough cups. Please choose again.");
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    Console.WriteLine("You do not have enough cups. Please choose again.");
+                    Console.WriteLine("Invalid Entry. Please try to enter a number again");
                 }
             }
             return default(int);
         }
-        private int SelectLemonAmount(Human gamePlayer)
+        private int SelectLemonAmount(Human gamePlayer,UserInterface gameInfo)
         {
             int amountRequested;
             bool lemonConfirmation;
+            string userInput;
             lemonConfirmation = false;
             while (lemonConfirmation == false)
             {
                 Console.WriteLine("How many lemons would you like to use? Please choose between '1' and '10'");
-                int.TryParse(Console.ReadLine(), out amountRequested);
-                if (amountRequested <= gamePlayer.gameInventory.gameLemons.Count && amountRequested <= 10 && amountRequested >= 1)
+                userInput = Console.ReadLine();
+                try
                 {
-                    lemonConfirmation = true;
-                    return amountRequested;
+                    amountRequested = int.Parse(userInput);
+                    if (amountRequested <= gamePlayer.gameInventory.gameLemons.Count && amountRequested <= 10 && amountRequested >= 1)
+                    {
+                        //lemonConfirmation = true;
+                        return amountRequested;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Entry. Please make sure you have enough Lemons and choose a NUMBER between '1' and '10'. Please try again.");
+                        gameInfo.RequestContinue();
+                        gameInfo.ClearScreen();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    Console.WriteLine("You do not have enough lemons or you choose more than 10. Please choose again.");
+                    Console.WriteLine("Invalid Entry. Please try to enter a number between '1' and '10'");
+                    gameInfo.RequestContinue();
+                    gameInfo.ClearScreen();
                 }
             }
             return default(int);
         }
-        private int SelectIceCubeAmount (Human gamePlayer)
+        private int SelectIceCubeAmount (Human gamePlayer, UserInterface gameInfo)
         {
             int amountRequested;
+            string userInput;
             bool iceCupConfirmation;
             iceCupConfirmation = false;
             while (iceCupConfirmation == false)
             {
                 Console.WriteLine("How many Ice Cubes would you like to use? Please choose between '1' and '10'");
-                int.TryParse(Console.ReadLine(), out amountRequested);
-                if (amountRequested <= gamePlayer.gameInventory.gameIceCubes.Count && amountRequested <= 10 && amountRequested >= 1)
+                userInput = Console.ReadLine();
+                try
                 {
-                    iceCupConfirmation = true;
-                    return amountRequested;
+                    amountRequested = int.Parse(userInput);
+                    if (amountRequested <= gamePlayer.gameInventory.gameIceCubes.Count && amountRequested <= 10 && amountRequested >= 1)
+                    {
+                        //iceCupConfirmation = true;
+                        return amountRequested;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Entry.Please make sure you have enough Ice Cubes and choose a NUMBER between '1' and '10'.Please try again.");
+                        gameInfo.RequestContinue();
+                        gameInfo.ClearScreen();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    Console.WriteLine("You do not have enough ice cubes or you did not use an amount between 1 and 10. Please choose again.");
+                    Console.WriteLine("Invalid Entry. Please try to enter a number between '1' and '10'");
+                    gameInfo.RequestContinue();
+                    gameInfo.ClearScreen();
                 }
             }
             return default(int);
         }
-        private int SelectSugarCubeAmount(Human gamePlayer)
+        private int SelectSugarCubeAmount(Human gamePlayer, UserInterface gameInfo)
         {
+            string userInput;
             int amountRequested;
             bool sugarCubeConfirmation;
             sugarCubeConfirmation = false;
             while(sugarCubeConfirmation == false)
             {
-                Console.WriteLine("How many Sugar Cubes would you like to use? Please choose between '1' and '10'");
-                int.TryParse(Console.ReadLine(), out amountRequested);
-                if (amountRequested <= gamePlayer.gameInventory.gameSugarCubes.Count && amountRequested <= 10 && amountRequested >= 1)
+                Console.WriteLine("How many Sugar Cubes would you like to use? Please choose between '1' and '10'");             
+                userInput = Console.ReadLine();
+                try
                 {
-
-                    return amountRequested;
+                    amountRequested = int.Parse(userInput);
+                    if (amountRequested <= gamePlayer.gameInventory.gameSugarCubes.Count && amountRequested <= 10 && amountRequested >= 1)
+                    {
+                        sugarCubeConfirmation = true;
+                        return amountRequested;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Entry. Please make sure you have enough Sugar Cubes and choose a NUMBER between '1' and '10'. Please try again.");
+                        gameInfo.RequestContinue();
+                        gameInfo.ClearScreen();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    Console.WriteLine("You do not have enough sugar cubes or you did not use an amount between 1 and 10. Please try again.");
+                    Console.WriteLine("Invalid Entry. Please try to enter a number between '1' and '10'");
+                    gameInfo.RequestContinue();
+                    gameInfo.ClearScreen();
                 }
             }
             return default(int);
@@ -539,6 +592,11 @@ namespace LemonadeStandv2._0
                     lemonadeTaste = "sweet";
                     return lemonadeTaste;
                 }
+                else if (taste >= 0)
+                {
+                    lemonadeTaste = "nuetral";
+                    return lemonadeTaste;
+                }
             }
             else
             {
@@ -551,20 +609,19 @@ namespace LemonadeStandv2._0
         {
             Console.WriteLine("This batch of lemonade has a {0} taste.",lemonadeTaste);
         }
-        private decimal DetermineSellingPrice()//make this into a while loop for verification
+        private decimal DetermineSellingPrice(UserInterface gameinfo)
         {
-            decimal sellPrice;
+            string userInput;
             Console.WriteLine("How much would you like to charge? (Please include your dollar and cents - examples: 1.50, .99, .01)");
+            userInput = Console.ReadLine();
             try
             {
-                decimal.TryParse(Console.ReadLine(), out sellPrice);
-                return sellPrice;
+                return decimal.Parse(userInput);
             }
             catch (Exception)
             {
-                Console.WriteLine("Not a valid selection. Please try again.");
-                DetermineSellingPrice();
-                throw;
+                Console.WriteLine("Not a valid selection. Please try again. (Please include your dollar and cents - examples: 1.50, .99, .01)");
+                return DetermineSellingPrice(gameinfo);
             } 
         }
         private void StoreDailySellingPrice(decimal dailySalePrice)
@@ -674,6 +731,10 @@ namespace LemonadeStandv2._0
         {
             return numberOfSales * cupSalePrice;
         }
+        private void AddRevenueToBank(Human gamePlayer, decimal dailyRevenue)
+        {
+            gamePlayer.playerWallet.TotalDollars = gamePlayer.playerWallet.TotalDollars + dailyRevenue;
+        }
         private void DisplayDailySales(decimal dailyAmountOfSales, decimal transactionsForDay)
         {
             Console.WriteLine("You made {0} dollars today off of {1} transactions.", dailyAmountOfSales, transactionsForDay);
@@ -702,11 +763,10 @@ namespace LemonadeStandv2._0
         private decimal calculateTotalTransactions(List<decimal> gameTransactions)
         {
             return gameTransactions.Sum();
-
         }
         private void DisplayAllSales(decimal totalGameTransactions, decimal totalGameRevenue)
         {
-            Console.WriteLine("You have made {0} dollars total off of {1} total transactions",totalGameRevenue,totalGameTransactions);
+            Console.WriteLine("So far, your lemonade stand has made {0} dollars total off of {1} total transactions",totalGameRevenue,totalGameTransactions);
         }
     }
 }
