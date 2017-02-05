@@ -58,12 +58,21 @@ namespace LemonadeStandv2._0
                     gameInformation.ClearScreen();
                     Console.WriteLine("Okay, {0}.", gamePlayer.PlayerName);
                     gameInformation.DisplayOptions();
-                    ReceiveOptionRequest(gameInformation, gamePlayer,rndNumber, selectedGameDays);
+                    ReceiveOptionRequest(gameInformation, gamePlayer,rndNumber);
                 }
             }
-            Console.WriteLine("Thanks for playing! Come Back again.");
-            Console.WriteLine("Press Enter to Exit");
-            Console.ReadLine();
+            if (selectedGameDays.Count == 0)
+            {
+                Console.WriteLine("You have completed a total of {0} game days! Thanks for playing Lemonade Stand! Come Back again.",userGameDaySelection);
+                Console.WriteLine("Press Enter to Exit");
+                Console.ReadLine();
+            }
+            else if (gamePlayers.Count == 0)
+            {
+                Console.WriteLine("O. You don't have enough money to continue. Thanks for playing Lemonade Stand! Come Back again.");
+                Console.WriteLine("Press Enter to Exit");
+                Console.ReadLine();
+            }
         }
         public int SelectNumberOfGameDays()
         {
@@ -184,9 +193,11 @@ namespace LemonadeStandv2._0
                 Console.WriteLine("{0} has {1} dollars.",player.PlayerName, player.playerWallet.TotalDollars);
             }
         }
-        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer,Random randomNumber, List<Day> listOfGamedays)
+        public void ReceiveOptionRequest(UserInterface gameInfo,Human gamePlayer,Random randomNumber)
         {
             string userinput = Console.ReadLine().ToLower();
+            List<Day> weeklyForcasts;
+
             switch (userinput)
             {
                 case "rules":
@@ -194,7 +205,7 @@ namespace LemonadeStandv2._0
                     gameInfo.DisplayRules();
                     gameInfo.RequestContinue();
                     gameInfo.DisplayOptions();
-                    ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber, listOfGamedays);
+                    ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
                     break;
                 case "store":
                     gameInfo.ClearScreen();
@@ -202,13 +213,16 @@ namespace LemonadeStandv2._0
                     break;
                 case "sell":
                     gameInfo.ClearScreen();
+                    weeklyForcasts = GenerateWeeklyForcast(randomNumber);
+                    DisplayWeeklyForcast(weeklyForcasts);
+                    gameInfo.RequestContinue();
                     if (gamePlayer.gameInventory.gameCups.Count < 1 || gamePlayer.gameInventory.gameLemons.Count < 1 || gamePlayer.gameInventory.gameIceCubes.Count < 1 || gamePlayer.gameInventory.gameSugarCubes.Count < 1)
                     {
                         Console.WriteLine("You must go to the store before we can make and sell lemonade.");
                         gameInfo.RequestContinue();
-                        gameInformation.ClearScreen();
+                        gameInfo.ClearScreen();
                         gameInfo.DisplayOptions();
-                        ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber, listOfGamedays);
+                        ReceiveOptionRequest(gameInfo, gamePlayer,randomNumber);
                     }
                     else
                     {
@@ -230,6 +244,53 @@ namespace LemonadeStandv2._0
                     Console.WriteLine("Invalid Entry. Please select either 'rules' - 'store' - 'sell' or 'finish day'");
                     gameInfo.RequestContinue();
                     break;
+            }
+        }
+        private List<Day> GenerateWeeklyForcast(Random randomNumber)
+        {
+            List<Day> gameForcasts = new List<Day>();
+            int arrayLength;
+            int tempConditionNumber;
+            decimal tempNumber;
+            arrayLength = selectedGameDays.Count()-1;
+            tempNumber = randomNumber.Next(1, 10);
+            tempConditionNumber = randomNumber.Next(1, 3);
+            for (int i = 0; i < 5 && i <= arrayLength; i++)
+            {
+                gameForcasts.Add(new Day(randomNumber));
+                if (tempNumber % 2 == 0)
+                {
+                    gameForcasts[i].WeatherCondition.Temperature = selectedGameDays[i].WeatherCondition.Temperature - tempNumber;
+                }
+                else
+                {
+                    gameForcasts[i].WeatherCondition.Temperature = selectedGameDays[i].WeatherCondition.Temperature + tempNumber;
+                }
+                if (tempConditionNumber == 1)
+                {
+                    gameForcasts[i].WeatherCondition.Condition = "sunny";
+                }
+                else if (tempConditionNumber == 2)
+                {
+                    gameForcasts[i].WeatherCondition.Condition = "raining";
+                }
+                else
+                {
+                    gameForcasts[i].WeatherCondition.Condition = "cloudy";
+                }
+            }
+            return gameForcasts;
+        }
+        private void DisplayWeeklyForcast(List<Day> forcastDays)
+        {
+            Console.WriteLine("Here's what the weather looks like for week.");
+            int arrayLength;
+            int i = 0;
+            arrayLength = forcastDays.Count();
+            for (i=0; i < 5 && i < arrayLength; i++)
+            {
+                Console.WriteLine("Day {0}: Temperature: {1}", i+1, forcastDays[i].WeatherCondition.Temperature);
+                Console.WriteLine("Day {0}: Weather Condition: {1}", i+1, forcastDays[i].WeatherCondition.Condition);
             }
         }
         private void ExecuteStoreOptions(Human gamePlayer,UserInterface gameInfo)
@@ -426,7 +487,6 @@ namespace LemonadeStandv2._0
             totalGameRevenue = CalculateTotalGameRevenue(dailyTransactions, salePrices);
             DisplayAllSales(totalGameTransactions, totalGameRevenue);
             gameInfo.RequestContinue();
-
             gameInfo.ClearScreen();
         }
         private void DisplayInventory(Human gamePlayer)
@@ -638,7 +698,7 @@ namespace LemonadeStandv2._0
         }
         private void DisplayDailyWeather(Day currentDay)
         { 
-            Console.WriteLine("Okay. Let's sell some Lemonade");
+            Console.WriteLine("\nOkay. Let's sell some Lemonade");
             Console.WriteLine("Here's what the weather looks like for today.");
             Console.WriteLine("Temperature: {0}", currentDay.WeatherCondition.Temperature);
             Console.WriteLine("Weather Condition: {0}", currentDay.WeatherCondition.Condition);
@@ -655,13 +715,14 @@ namespace LemonadeStandv2._0
             }
             return 1;
         }
-        private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber,Human gamePlayer,int priceModifier)
+        private void SellLemonadeCups(Day currentDay, string lemonadeTaste, Random randomNumber, Human gamePlayer, int priceModifier)
         {
             int totalLemonadeCups;
-            totalLemonadeCups = gamePlayer.gameInventory.gameLemonadeCups.Count();
+
             foreach (Customer potientialCustomer in currentDay.lemonadeCustomers)
             {
-                Console.WriteLine("A new customer is approaching");
+                totalLemonadeCups = gamePlayer.gameInventory.gameLemonadeCups.Count();
+                Console.WriteLine("\nA new customer is approaching");
                 Console.Write("*");
                 Thread.Sleep(100);
                 Console.Write("*");
@@ -670,62 +731,60 @@ namespace LemonadeStandv2._0
                 Thread.Sleep(100);
                 Console.Write("*");
                 Thread.Sleep(100);
-                if (totalLemonadeCups > 0)
+                if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && totalLemonadeCups!=0)
                 {
-                    if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
-                    {
-                        decimal chanceTobuy = (1 * priceModifier);
-                        if (chanceTobuy == 1)
-                        {
-                            currentDay.purchasingCustomers.Add(potientialCustomer);
-                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                            Console.WriteLine("The customer purchased some lemonade!");
+                    decimal chanceTobuy = (1 * priceModifier);
+                    if (chanceTobuy == 1)
+                     {
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
                         }
                     }
-                    else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
+                else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 60 && totalLemonadeCups != 0)
+                {
+                    decimal chanceTobuy = randomNumber.Next(1, (2 * priceModifier));
+                    if (chanceTobuy == 1)
                     {
-                        decimal chanceTobuy = randomNumber.Next(1, (2*priceModifier));
-                        if (chanceTobuy == 1)
-                        {
-                            currentDay.purchasingCustomers.Add(potientialCustomer);
-                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                            Console.WriteLine("The customer purchased some lemonade!");
-                        }
-                    }
-                    else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && currentDay.WeatherCondition.Condition == "raining")
-                    {
-                        decimal chanceTobuy = randomNumber.Next(1, (3*priceModifier));
-                        if (chanceTobuy == 1)
-                        {
-                            currentDay.purchasingCustomers.Add(potientialCustomer);
-                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                            Console.WriteLine("The customer purchased some lemonade!");
-                        }
-                    }
-                    if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 80)
-                    {
-                        decimal chanceTobuy = randomNumber.Next(1, (5*priceModifier));
-                        if (chanceTobuy == 1)
-                        {
-                            currentDay.purchasingCustomers.Add(potientialCustomer);
-                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                            Console.WriteLine("The customer purchased some lemonade!");
-                        }
-                    }
-                    else if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 60)
-                    {
-                        decimal chanceTobuy = randomNumber.Next(1, (10*priceModifier));
-                        if (chanceTobuy == 1)
-                        {
-                            currentDay.purchasingCustomers.Add(potientialCustomer);
-                            gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
-                            Console.WriteLine("The customer purchased some lemonade!");
-                        }
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
                     }
                 }
-                else
+                else if (potientialCustomer.TastePreference == lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && currentDay.WeatherCondition.Condition == "raining" && totalLemonadeCups != 0)
+                {
+                    decimal chanceTobuy = randomNumber.Next(1, (3 * priceModifier));
+                    if (chanceTobuy == 1)
+                    {
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
+                    }
+                }
+                if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 80 && totalLemonadeCups != 0)
+                {
+                    decimal chanceTobuy = randomNumber.Next(1, (5 * priceModifier));
+                    if (chanceTobuy == 1)
+                    {
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
+                    }
+                }
+                else if (potientialCustomer.TastePreference != lemonadeTaste && currentDay.WeatherCondition.Temperature > 60 && totalLemonadeCups != 0)
+                {
+                    decimal chanceTobuy = randomNumber.Next(1, (7 * priceModifier));
+                    if (chanceTobuy == 1)
+                    {
+                        currentDay.purchasingCustomers.Add(potientialCustomer);
+                        gamePlayer.gameInventory.gameLemonadeCups.RemoveAt(0);
+                        Console.WriteLine("The customer purchased some lemonade!");
+                    }
+                }
+                else if (totalLemonadeCups == 0)
                 {
                     Console.WriteLine("You are out of Lemonade for the day!");
+                    break;
                 }
             }
         }
